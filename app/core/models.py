@@ -1,8 +1,10 @@
 from django.db import models
+from django.conf import settings
+
 class Orders(models.Model):
-    userId = models.IntegerField()
-    customerId = models.IntegerField()
-    stockID = models.IntegerField()
+    userId = models.ForeignKey(settings.AUTH_USER_MODEL)
+    customerId = models.ForeignKey(Customers)
+    stockID = models.ForeignKey(Stock)
     amount = models.IntegerField() # As this is now generalized, using integer instead
     date = models.DateTimeField()
     shortnote = models.CharField(max_length=20)
@@ -20,7 +22,7 @@ class Stock(models.Model):
     cents = models.IntegerField() #In cents - needs function wrapping. Not using float because of precision
     number = models.IntegerField() #As a generic inventory item, integer
     description = models.CharField(max_length=200)
-    supplierID = models.IntegerField()
+    supplierID = models.ForeignKey(Suppliers)
 
     def __str__(self):
         return str(self.upc) + " " + str(self.productName)
@@ -37,7 +39,7 @@ class Customers(models.Model):
     def __str__(self):
         return self.userNameclass
 
-Suppliers(models.Model):
+class Suppliers(models.Model):
     name = models.CharField(max_length=200)
     email = models.CharField(max_length=200)
     phoneNumber = models.CharField(max_length=50)
