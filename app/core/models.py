@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from . import Stock,Suppliers,Customers
 
 class Orders(models.Model):
     userId = models.ForeignKey(settings.AUTH_USER_MODEL)
@@ -37,7 +38,7 @@ class Customers(models.Model):
     note = models.CharField(max_length=200)
 
     def __str__(self):
-        return self.userNameclass
+        return self.userName
 
 class Suppliers(models.Model):
     name = models.CharField(max_length=200)
