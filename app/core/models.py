@@ -34,9 +34,9 @@ class Stock(models.Model):
         return self.cents/100
 
 class Orders(models.Model):
-    userId = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL)
-    customerId = models.ForeignKey(Customers, on_delete=models.SET_NULL)
-    stockID = models.ForeignKey(Stock, on_delete=models.SET_NULL)
+    userId = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+    customerId = models.ForeignKey(Customers, on_delete=models.SET_NULL, null=True)
+    stockID = models.ForeignKey(Stock, on_delete=models.SET_NULL, null=True)
     amount = models.IntegerField() # As this is now generalized, using integer instead
     date = models.DateTimeField()
     shortnote = models.CharField(max_length=20)
