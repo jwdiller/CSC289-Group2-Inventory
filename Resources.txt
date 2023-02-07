@@ -1,12 +1,16 @@
 Django web help
-
 https://learning.oreilly.com/videos/python-django-web/9781838981686/
+
+
 Python Django Web Development: To-Do App (Takes about 2 hours to complete. Simple Django Tutorial with a simple Database included.)
-
-
-
 https://docs.djangoproject.com/en/4.1/intro/tutorial01/
 https://docs.djangoproject.com/en/4.1/topics/db/models/
+
+
+Bash references
+https://www.gnu.org/software/bash/manual/html_node/index.html#SEC_Contents
+https://www.man7.org/linux/man-pages/man1/bash.1.html#EXPANSION
+https://man7.org/linux/man-pages/man1/awk.1p.html
 
 
 Python/Django models help
