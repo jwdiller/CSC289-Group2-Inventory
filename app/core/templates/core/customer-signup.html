@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+<form method="POST" role="Customer" name="newCustomer" action='signupSUBMIT'>
+    {% csrf_token %}
+    <table>
+        <tr><td>Name</td><td><input type="Customer" name="userName" placeholder="Name"></td></tr>
+        <tr><td>Email</td><td><input type="Customer" name="email" placeholder="something@something.com"></td></tr>
+        <tr><td>Phone Number</td><td><input type="Customer" name="phoneNumber" placeholder="1-(000)-000-0000"></td></tr>
+        <tr><td>Note</td><td><input type="Customer" name="note" placeholder="Note Here"></td></tr>
+    </table>
+    <button type="submit">Submit</button>
+</form>
+{% endblock %}
