@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}Customer{% endblock %}
+
+{% block content %}
+{% if tableitems %}
+	<table border=1>
+		<tr>
+			<td>ID</td>
+			<td>User Name</td>
+			<td>E-Mail</td>
+			<td>Phone Number</td>
+			<td>Note</td>
+		</tr>
+	{% for row in tableitems %}
+		<tr>
+			<td>{{ row.id }}</td>
+			<td>{{ row.userName }}</td>
+			<td>{{ row.email }}</td>
+			<td>{{ row.phoneNumber }}</td>
+			<td>
+			{% if row.note %}
+				{{ row.note }}
+			{% else %}
+				None
+			{% endif %}
+			</td>
+		</tr>
+	{% endfor %}
+	</table>
+{% else %}
+	<p>No entries in the Customer Database.</p>
+{% endif %}
+{% endblock %}
