@@ -5,7 +5,10 @@
 </head>
 <body>
 	<nav class="navbar">
-		Insert NavBar Here
+		<ul>
+			<li><a href="{% url 'customer' %}">Customer Database</a></li>
+			<li><a href="{% url 'about' %}">About Us</a></li>
+		</ul>
 	</nav>
 	<div class="container">
 		{% block content %}
