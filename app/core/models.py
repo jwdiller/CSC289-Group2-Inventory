@@ -48,6 +48,22 @@ class Orders(models.Model):
     def price(self):
         return self.cents / 100
 
+class Incoming(models.Model):
+    userId = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+    supplierId = models.ForeignKey(Suppliers, on_delete=models.SET_NULL, null=True)
+    stockID = models.ForeignKey(Stock, on_delete=models.SET_NULL, null=True)
+    amount = models.IntegerField() # As this is now generalized, using integer instead
+    date = models.DateTimeField()
+    shortnote = models.CharField(max_length=20)
+    note = models.CharField(max_length=200) # May be needed
+    cents = models.IntegerField() # While amount * stockPrice would be default, this changes
+
+    def __str__(self):
+        return str(self.date) + " " + str(self.stockID) + " " + str(self.shortnote)
+    def price(self):
+        return self.cents / 100
+
+
 
 
 
