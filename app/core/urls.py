@@ -7,4 +7,5 @@ urlpatterns = [
  	path('database/customer', views.customer, name='customer'), # Start of database URLS
   	path('signup', views.customersignup, name='signup'), # Sign up
 	path('signupSUBMIT', views.customersignupSubmit, name='signupSUBMIT')
+ 	path('database/customer', views.customer, name='customer'), # Start of database URLS
 ]
