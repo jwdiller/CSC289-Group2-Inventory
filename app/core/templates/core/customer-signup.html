@@ -3,7 +3,7 @@
 {% block title %}Sign Up{% endblock %}
 
 {% block content %}
-<form method="POST" role="Customer" name="newCustomer" action='signupSUBMIT'>
+<form method="POST" role="Customer" name="newCustomer" action='signup'>
     {% csrf_token %}
     <table>
         <tr><td>Name</td><td><input type="Customer" name="userName" placeholder="Name"></td></tr>
