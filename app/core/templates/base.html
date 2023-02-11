@@ -2,14 +2,27 @@
 <!doctype html>
 <head>
 	<title>SIM - {% block title %}Generic Page{% endblock %}</title>
+	<style>
+		.navbar-horizontal {
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+			width: 60px;
+		}
+	</style>
 </head>
 <body>
 	<nav class="navbar">
-		<ul>
+		<ul class="navbar-horizontal">
 			<li><a href="{% url 'home' %}">Home</a></li>
 			<li><a href="{% url 'signup' %}">Sign Up</a></li>
 			<li><a href="{% url 'customer' %}">Customer Database</a></li>
 			<li><a href="{% url 'about' %}">About Us</a></li>
+			<li></li>
+			<li><a href="{% url 'suppliersignup' %}">Add Supplier</a></li>
+			<li><a href="{% url 'stocksignup' %}">Stock New Product</a></li>
+			<li><a href="{% url 'ordersignup' %}">New Outgoing Order</a></li>
+			<li><a href="{% url 'incomingsignup' %}">New Incoming Order</a></li>
 		</ul>
 	</nav>
 	<div class="container">
