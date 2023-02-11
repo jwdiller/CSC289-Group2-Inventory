@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
+from .forms import UserRegisterForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 
 
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = UserRegisterForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request,('!!Sign Up Successful!!'))
@@ -15,5 +15,5 @@ def register(request):
             messages.error(request, ('Error in creating user'))
             return(request, 'users/register.html', {'form' : form})
     else:
-        form = UserCreationForm()
+        form = UserRegisterForm()
     return render(request, 'users/register.html', {'form': form})
