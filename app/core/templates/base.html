@@ -18,11 +18,8 @@
 					<li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Log In</a></li>
 					<li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Sign Up</a></li>
 					<li class="nav-item"><a class="nav-link" href="{% url 'customer' %}">Customer Database</a></li>
+					<li class="nav-item"><a class="nav-link" href="{% url 'signup-home' %}">New Entries</a></li>
 					<li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About Us</a></li>
-					<li class="nav-item"><a class="nav-link" href="{% url 'suppliersignup' %}">Add Supplier</a></li>
-					<li class="nav-item"><a class="nav-link" href="{% url 'stocksignup' %}">Stock New Product</a></li>
-					<li class="nav-item"><a class="nav-link" href="{% url 'ordersignup' %}">New Outgoing Order</a></li>
-					<li class="nav-item"><a class="nav-link" href="{% url 'incomingsignup' %}">New Incoming Order</a></li>
 				</ul>
 		</div>
 	</nav>
@@ -33,7 +30,7 @@
 		{% endblock %}
 	</div>
 	<div class="endbar">
-		©2023 The InterGalactic Pirate Support Group, powered by Django, BootStrap, Crispy Forms
+		©2023 The InterGalactic Pirate Support Group, powered by <a href="https://www.djangoproject.com" target="_blank">Django</a>, <a href="https://getbootstrap.com" target="_blank">BootStrap<a>, <a href="https://django-crispy-forms.readthedocs.io/en/latest/" target="_blank">Crispy Forms</a>
 	</div>
 </main>
 </body>
