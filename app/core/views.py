@@ -22,6 +22,9 @@ def about(request):
 def customer(request):
     return render(request, 'customer-db.html', { 'tableitems': Customers.objects.all})
 
+def signuphome(request):
+    return render(request, 'core/create-entry.html', {})
+
 def customersignup(request):
     if request.method == 'POST':
         form = CustomerForm(request.POST or None)
