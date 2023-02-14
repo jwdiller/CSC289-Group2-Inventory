@@ -1,0 +1,5 @@
+SELECT * FROM wakeicecream.core_suppliers;
+INSERT INTO wakeicecream.core_suppliers (name, email, phoneNumber, note)
+VALUES("Ice Cream Unlimited", "sales@icu.com", 555-123-4567, "Good supplier for bulk orders"),
+	("Creamy Treats", "info@creamytreats.com", 555-987-6543, "Offers unique flavors"),
+    ("Ice-O-Rama", "support@iceorama.com", 555-456-7890, "Cheapest supplier");
