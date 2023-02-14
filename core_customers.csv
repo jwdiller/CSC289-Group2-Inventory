@@ -1,0 +1,12 @@
+id,userName,email,phoneNumber,note
+1,talva,talva@waketech.edu,12345677,first
+2,jack,jack@example.com,1234567890,"First customer"
+3,jill,jill@example.com,0987654321,"Second customer"
+4,john,john@example.com,0123456789,"Third customer"
+5,jane,jane@example.com,1234567890,"Fourth customer"
+6,jim,jim@example.com,0987654321,"Fifth customer"
+7,josh,josh@example.com,0123456789,"Sixth customer"
+8,jenn,jenn@example.com,1234567890,"Seventh customer"
+9,johnny,johnny@example.com,0987654321,"Eighth customer"
+10,joe,joe@example.com,0123456789,"Ninth customer"
+11,jules,jules@example.com,1234567890,"Tenth customer"
