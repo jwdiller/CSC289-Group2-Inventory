@@ -20,7 +20,18 @@ def about(request):
 	return render(request, 'about.html', {'name': firstpart + " " + secondpart})
 
 def customer(request):
-    return render(request, 'customer-db.html', { 'tableitems': Customers.objects.all})
+    return render(request, 'database.html', {'title' : 'Customer', 'tableitems' : Customers.objects.all})
+def supplier(request):
+    return render(request, 'database.html', {'title' : 'Supplier', 'tableitems' : Suppliers.objects.all})
+def stock(request):
+    return render(request, 'database.html', {'title' : 'Stock', 'tableitems' : Stock.objects.all})
+def order(request):
+    return render(request, 'database.html', {'title' : 'Order', 'tableitems' : Orders.objects.all})
+def incoming(request):
+    return render(request, 'database.html', {'title' : 'Incoming', 'tableitems' : Incoming.objects.all})
+def dbhome(request):
+    return render(request, 'database.html', {})
+
 
 def signuphome(request):
     return render(request, 'core/create-entry.html', {})
@@ -32,7 +43,9 @@ def customersignup(request):
             form.save()
             messages.success(request,('Sign Up Successful'))
             return redirect('home')
-    return render(request, 'core/customer-signup.html', {})
+    else :
+        form = CustomerForm()
+    return render(request, 'core/create-entry.html', {'form': form, 'formTitle' : 'Create Customer', 'formHeader' : 'Register a Customer here'})
 
 def suppliersignup(request):
 	if request.method == 'POST':
