@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load render_table from django_tables2 %}
+{% block title %}
+    {% if title %}
+        {{ title }} Database
+    {% else %}
+        DataBase Central
+    {% endif %}
+{% endblock %}
+{% block content %}
+
+<!-- 
+    It's a dataBASE.html
+
+    Get it? Get it?
+
+    I'll see myself out.
+-->
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">DATABASE</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="{% url 'DB-home' %}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'customerDB' %}">Customer</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'supplierDB' %}">Supplier</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'stockDB' %}">Products</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'orderDB' %}">Outgoing Orders</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'incomingDB' %}">Incoming Orders</a></li>
+            </ul>
+    </div>
+</nav>
+{% if title %}
+    {% if tableitems %}
+        {% render_table tableitems %}
+    {% else %}
+        There are no entries in the {{title}} Database.
+    {% endif %}
+{% else %}
+    This is where you can see the databases
+{% endif %}
+
+{% endblock %}
