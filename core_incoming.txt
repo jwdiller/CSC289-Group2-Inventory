@@ -1,0 +1,8 @@
+SELECT * FROM wakeicecream.core_incoming;
+INSERT INTO wakeicecream.core_incoming(amount, date, shortnote, note, cents, stockID_id, supplierId_id, userId_id)
+VALUES(30, curdate(), "Incoming Ice Cream", "Supplier is sending Ice cream", 99, 31, 1, 2),
+(30, curdate(), "Incoming Ice Cream", "Supplier is sending Ice cream", 99, 31, 1, 2),
+(20, curdate(), "Incoming Ice Cream", "Supplier is sending Ice cream", 99, 32, 1, 2),
+(40, curdate(), "Incoming Ice Cream", "Supplier is sending Ice cream", 99, 33, 2, 2),
+(50, curdate(), "Incoming Ice Cream", "Supplier is sending Ice cream", 99, 34, 2, 2),
+(10, curdate(), "Incoming Ice Cream", "Supplier is sending Ice cream", 99, 35, 3, 2);
