@@ -1,0 +1,16 @@
+Auth_user_groups --> SELECT * FROM wakeicecream.auth_user_groups;
+INSERT INTO wakeicecream.auth_user_groups(user_id, group_id)
+VALUES(2, 2);
+
+Auth_group_permissions --> SELECT * FROM wakeicecream.auth_group_permissions;
+INSERT INTO wakeicecream.auth_group_permissions(group_id, permission_id)
+VALUES(2, 4);
+
+Auth_user_user_permissions --> SELECT * FROM wakeicecream.auth_user_user_permissions;
+INSERT INTO wakeicecream.auth_user_user_permissions(user_id, permission_id)
+VALUES(2, 4);
+
+
+
+
+
