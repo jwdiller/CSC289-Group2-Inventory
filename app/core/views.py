@@ -5,14 +5,15 @@ from .forms import * #For forms
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
+from better_profanity import profanity
 
 # Create your views here.
 
 def isAuthorized(request): #need to write this
-    return;
+	return
 
 def home(request):
-    return render(request, 'home.html', {})
+	return render(request, 'home.html', {})
 
 def about(request):
 	firstpart = random.choice(['Grand', 'Evil', 'Uncouth', 'Mighty'])
@@ -20,40 +21,44 @@ def about(request):
 	return render(request, 'about.html', {'name': firstpart + " " + secondpart})
 
 def customer(request):
-    return render(request, 'database.html', {'title' : 'Customer', 'tableitems' : Customers.objects.all})
+	return render(request, 'database.html', {'title' : 'Customer', 'tableitems' : Customers.objects.all})
 def supplier(request):
-    return render(request, 'database.html', {'title' : 'Supplier', 'tableitems' : Suppliers.objects.all})
+	return render(request, 'database.html', {'title' : 'Supplier', 'tableitems' : Suppliers.objects.all})
 def stock(request):
-    return render(request, 'database.html', {'title' : 'Stock', 'tableitems' : Stock.objects.all})
+	return render(request, 'database.html', {'title' : 'Stock', 'tableitems' : Stock.objects.all})
 def order(request):
-    return render(request, 'database.html', {'title' : 'Order', 'tableitems' : Orders.objects.all})
+	return render(request, 'database.html', {'title' : 'Order', 'tableitems' : Orders.objects.all})
 def incoming(request):
-    return render(request, 'database.html', {'title' : 'Incoming', 'tableitems' : Incoming.objects.all})
+	return render(request, 'database.html', {'title' : 'Incoming', 'tableitems' : Incoming.objects.all})
 def dbhome(request):
-    return render(request, 'database.html', {})
+	return render(request, 'database.html', {})
 
 
 def signuphome(request):
-    return render(request, 'core/create-entry.html', {})
+	return render(request, 'core/create-entry.html', {})
 
 def customersignup(request):
-    if request.method == 'POST':
-        form = CustomerForm(request.POST or None)
-        if form.is_valid():
-            form.save()
-            messages.success(request,('Sign Up Successful'))
-            return redirect('home')
-    else :
-        form = CustomerForm()
-    return render(request, 'core/create-entry.html', {'form': form, 'formTitle' : 'Create Customer', 'formHeader' : 'Register a Customer here'})
+	if request.method == 'POST':
+		form = CustomerForm(request.POST or None)
+		if form.is_valid():
+			form.save()
+			messages.success(request,('Sign Up Successful'))
+			return redirect('home')
+	else:
+		form = CustomerForm()
+	return render(request, 'core/create-entry.html', {'form': form, 'formTitle' : 'Create Customer', 'formHeader' : 'Register a Customer here'})
 
 def suppliersignup(request):
 	if request.method == 'POST':
 		form = SupplierForm(request.POST)
 		if form.is_valid():
-			form.save()
-			messages.success(request,('Supplier Added'))
-			return redirect('home')
+			name = form.data.get('name')
+			if (profanity.contains_profanity(name)):
+				messages.success(request,('Inappropriate/Invalid name, please try again!'))
+			else:
+				form.save()
+				messages.success(request,('Supplier Added'))
+				return redirect('home')
 	else:
 		form = SupplierForm()
 	return render(request, 'core/create-entry.html', {'form': form, 'formTitle' : 'Create Supplier', 'formHeader' : 'Register a Supplier here'})
@@ -62,12 +67,16 @@ def stocksignup(request):
 	if request.method == 'POST':
 		form = StockForm(request.POST)
 		if form.is_valid():
-			form.save()
-			messages.success(request,('Product Added'))
-			return redirect('home')
+			productName = form.data.get('productName')
+			if (profanity.contains_profanity(productName)):
+				messages.success(request,('Inappropriate/Invalid product name, please try again!'))
+			else:
+				form.save()
+				messages.success(request,('Product Added'))
+				return redirect('home')
 	else:
 		form = StockForm()
-	return render(request, 'core/create-entry.html', {'form': form, 'formTitle' : 'Create Product Entry', 'formHeader' : 'Register a Project here'})
+	return render(request, 'core/create-entry.html', {'form': form, 'formTitle' : 'Create Product Entry', 'formHeader' : 'Register a Product here'})
 
 def ordersignup(request):
 	if request.method == 'POST':
