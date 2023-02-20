@@ -17,7 +17,7 @@ def register(request):
             return redirect('home')
         else:
             messages.error(request, ('Error in creating user'))
-            return(request, 'users/register.html', {'form' : form})
+            return render(request, 'users/register.html', {'form' : form})
     else:
         form = UserRegisterForm()
     return render(request, 'users/register.html', {'form': form})
