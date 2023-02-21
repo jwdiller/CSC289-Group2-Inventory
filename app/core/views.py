@@ -68,12 +68,20 @@ def stocksignup(request):
 		form = StockForm(request.POST)
 		if form.is_valid():
 			productName = form.data.get('productName')
+			productCost = int(form.data.get('cents'))
+			productAmount = int(form.data.get('number'))
 			if (profanity.contains_profanity(productName)):
 				messages.success(request,('Inappropriate/Invalid product name, please try again!'))
 			else:
-				form.save()
-				messages.success(request,('Product Added'))
-				return redirect('home')
+				if (productCost < 1 or productCost > 1000000):
+					messages.success(request,('Cents can\'t be less than 0 or greater than 1,000,000 (10,000 dollars), please try again!'))
+				else:
+					if (productAmount < 1 or productAmount > 1000):
+						messages.success(request,('Amount can\'t be less than 0 or greater than 1,000, please try again!'))
+					else:
+						form.save()
+						messages.success(request,('Product Added'))
+						return redirect('home')
 	else:
 		form = StockForm()
 	return render(request, 'core/create-entry.html', {'form': form, 'formTitle' : 'Create Product Entry', 'formHeader' : 'Register a Product here'})
@@ -82,9 +90,17 @@ def ordersignup(request):
 	if request.method == 'POST':
 		form = OrderForm(request.POST)
 		if form.is_valid():
-			form.save()
-			messages.success(request,('Outgoing Order Added'))
-			return redirect('home')
+			orderAmount = int(form.data.get('amount'))
+			orderCost = int(form.data.get('cents'))
+			if (orderAmount < 1 or orderAmount > 1000):
+				messages.success(request,('Amount can\'t be less than 0 or greater than 1,000, please try again!'))
+			else:
+				if (orderCost < 1 or orderCost > 1000000):
+					messages.success(request,('Cents can\'t be less than 0 or greater than 1,000,000 (10,000 dollars), please try again!'))
+				else:
+					form.save()
+					messages.success(request,('Outgoing Order Added'))
+					return redirect('home')
 	else:
 		form = OrderForm()
 	return render(request, 'core/create-entry.html', {'form': form, 'formTitle' : 'Create Outgoing Order', 'formHeader' : 'Register an Outgoing Order here'})
@@ -93,9 +109,17 @@ def incomingsignup(request):
 	if request.method == 'POST':
 		form = IncomingForm(request.POST)
 		if form.is_valid():
-			form.save()
-			messages.success(request,('Incoming Order Added'))
-			return redirect('home')
+			orderAmount = int(form.data.get('amount'))
+			orderCost = int(form.data.get('cents'))
+			if (orderAmount < 1 or orderAmount > 1000):
+				messages.success(request,('Amount can\'t be less than 0 or greater than 1,000, please try again!'))
+			else:
+				if (orderCost < 1 or orderCost > 1000000):
+					messages.success(request,('Cents can\'t be less than 0 or greater than 1,000,000 (10,000 dollars), please try again!'))
+				else:
+					form.save()
+					messages.success(request,('Incoming Order Added'))
+					return redirect('home')
 	else:
 		form = IncomingForm()
 	return render(request, 'core/create-entry.html', {'form': form, 'formTitle' : 'Create Incoming Order', 'formHeader' : 'Register an Incoming Order here'})
