@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
 
-
+# This initializes the register form that stores the data from the fields into the database
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
@@ -22,6 +22,7 @@ def register(request):
         form = UserRegisterForm()
     return render(request, 'users/register.html', {'form': form})
 
+# This takes the data from the fields and checks the database for its respective user
 def login(request):
     if request.method == 'POST':
 
