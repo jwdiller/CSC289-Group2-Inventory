@@ -4,11 +4,13 @@
 
 {% block content %}
 {% if messages %}
+	<ul>
 	{% for message in messages %}
-		<div>
+		<li><div class="alert {{ message.tags }}" role="alert">
             {{message}}
-        </div>
+        </div></li>
 	{% endfor %}
+	</ul>
 {% endif %}
 <p>
 Home Page
