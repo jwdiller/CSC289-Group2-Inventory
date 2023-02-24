@@ -20,7 +20,7 @@ class SupplierForm(forms.ModelForm):
 class StockForm(forms.ModelForm):
 	class Meta:
 		model = Stock
-		fields = ["productName", "upc",	"cents", "number", "description", "supplierID"]
+		fields = ["productName", "upc",	"cents", "amount", "description", "supplierID"]
 
 # This creates the outgoing order form fields for the "New Outgoing Order" page
 class OrderForm(forms.ModelForm):
@@ -31,6 +31,7 @@ class OrderForm(forms.ModelForm):
 
 # This creates the incoming order form fields for the "New Incoming Order" page
 class IncomingForm(forms.ModelForm):
-	class Meta:
-		model = Incoming
-		fields = ["userId", "supplierId", "stockID", "amount", "date", "shortnote", "note", "cents"]
+    date = forms.DateField(widget=forms.SelectDateWidget)
+    class Meta:
+        model = Incoming
+        fields = ["userId", "supplierId", "stockID", "amount", "date", "shortnote", "note", "cents"]

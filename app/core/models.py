@@ -30,7 +30,7 @@ class Stock(models.Model):
     productName = models.CharField(max_length=200, verbose_name="Product Name")
     upc = models.IntegerField(verbose_name="UPC") #ID for 'outside world'
     cents = models.IntegerField() #In cents - needs function wrapping. Not using float because of precision
-    number = models.IntegerField(verbose_name="Amount") #As a generic inventory item, integer
+    amount = models.IntegerField(verbose_name="Amount") # Generic Item-Integer, Current Stock, so should be modified by new Orders and Incoming
     description = models.CharField(max_length=200, verbose_name="Description")
     supplierID = models.ForeignKey(Suppliers, on_delete=models.CASCADE, verbose_name="Supplier ID")
 
@@ -45,7 +45,7 @@ class Orders(models.Model):
     userId = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, verbose_name="Authorizer ID")
     customerId = models.ForeignKey(Customers, on_delete=models.SET_NULL, null=True, verbose_name="Customer ID")
     stockID = models.ForeignKey(Stock, on_delete=models.SET_NULL, null=True, verbose_name="Stock ID")
-    amount = models.IntegerField(verbose_name="Amount") # As this is now generalized, using integer instead
+    amount = models.IntegerField(verbose_name="Amount") # Generalized, uses Integer. Subtracts from stock.amount
     date = models.DateTimeField(verbose_name="Date and Time")
     shortnote = models.CharField(max_length=20, verbose_name="Short Note")
     note = models.CharField(max_length=200, verbose_name="Note") # May be needed
@@ -62,8 +62,8 @@ class Incoming(models.Model):
     userId = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, verbose_name="Authorizer ID")
     supplierId = models.ForeignKey(Suppliers, on_delete=models.SET_NULL, null=True, verbose_name="Supplier ID")
     stockID = models.ForeignKey(Stock, on_delete=models.SET_NULL, null=True, verbose_name="Stock ID")
-    amount = models.IntegerField(verbose_name="Amount") # As this is now generalized, using integer instead
-    date = models.DateTimeField()
+    amount = models.IntegerField(verbose_name="Amount") # Generalized, uses Integer. Adds from stock.amount
+    date = models.DateTimeField(verbose_name="Date and Time")
     shortnote = models.CharField(max_length=20, verbose_name="Short Note")
     note = models.CharField(max_length=200, verbose_name="Note") # May be needed
     cents = models.IntegerField() # While amount * stockPrice would be default, this changes
