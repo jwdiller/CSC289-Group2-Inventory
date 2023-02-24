@@ -19,9 +19,7 @@ def home(request):
 # Generates random words and then calls the about.html page for display (using these words)
 # We most likely will change this later :/
 def about(request):
-	firstpart = random.choice(['Grand', 'Evil', 'Uncouth', 'Mighty'])
-	secondpart = random.choice(['Lord', 'Bandit', 'Master'])
-	return render(request, 'about.html', {'name': firstpart + " " + secondpart})
+	return render(request, 'about.html', {})
 
 # These will call the database.html file and send the responding database that will be shown for the user
 def customer(request):
@@ -51,7 +49,7 @@ def customersignup(request):
 			return redirect('home')
 	else:
 		form = CustomerForm()
-	# I have no clue what this line below does, please edit this comment
+	# formTitle is the Title for Tab, formHeader is human-readable on the page itself
 	return render(request, 'core/create-entry.html', {'form': form, 'formTitle' : 'Create Customer', 'formHeader' : 'Register a Customer here'})
 
 # This function confirms that the form for the 'Add Supplier' page has been fully filled out, validates the data, and then saves its contents
@@ -68,7 +66,7 @@ def suppliersignup(request):
 				return redirect('home')
 	else:
 		form = SupplierForm()
-	# I have no clue what this line below does, please edit this comment
+	# formTitle is the Title for Tab, formHeader is human-readable on the page itself
 	return render(request, 'core/create-entry.html', {'form': form, 'formTitle' : 'Create Supplier', 'formHeader' : 'Register a Supplier here'})
 
 # This function confirms that the form for the 'Stock New Product' page has been fully filled out, validates the data, and then saves its contents
@@ -93,7 +91,7 @@ def stocksignup(request):
 						return redirect('home')
 	else:
 		form = StockForm()
-	# I have no clue what this line below does, please edit this comment
+	# formTitle is the Title for Tab, formHeader is human-readable on the page itself
 	return render(request, 'core/create-entry.html', {'form': form, 'formTitle' : 'Create Product Entry', 'formHeader' : 'Register a Product here'})
 
 # This function confirms that the form for the 'New Outgoing Order' page has been fully filled out, validates the data, and then saves its contents
@@ -114,7 +112,7 @@ def ordersignup(request):
 					return redirect('home')
 	else:
 		form = OrderForm()
-	# I have no clue what this line below does, please edit this comment
+	# formTitle is the Title for Tab, formHeader is human-readable on the page itself
 	return render(request, 'core/create-entry.html', {'form': form, 'formTitle' : 'Create Outgoing Order', 'formHeader' : 'Register an Outgoing Order here'})
 
 # This function confirms that the form for the 'New Incoming Order' page has been fully filled out, validates the data, and then saves its contents
@@ -135,5 +133,5 @@ def incomingsignup(request):
 					return redirect('home')
 	else:
 		form = IncomingForm()
-	# I have no clue what this line below does, please edit this comment
+	# formTitle is the Title for Tab, formHeader is human-readable on the page itself
 	return render(request, 'core/create-entry.html', {'form': form, 'formTitle' : 'Create Incoming Order', 'formHeader' : 'Register an Incoming Order here'})

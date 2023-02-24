@@ -1,8 +1,29 @@
 {% extends 'base.html' %}
 
-{% block title %}About Us{% endblock %}
+{% block title %}About{% endblock %}
 
 {% block content %}
-<p>Being an evil Intergalactic Pirate is hard. It's hard, and no one understands.</p>
-<p><h3>EXCEPT US, {{ name }}</h3></p>
+<div style="
+    display : flex;
+    justify-content: space-around;
+">
+    <div>
+        <h3>Developers</h3>
+        <ul>
+            <li>James Diller</li>
+            <li>Aniketh Babu</li>
+            <li>Tomas Alvarez</li>
+            <li>Evan Spiering</li>
+            <li>David Smedburg</li>
+        </ul>
+    </div>
+    <div>
+        <h3>Technologies Utilized</h3>
+        <ul>
+            <li>Django</li>
+            <li>BootStrap</li>
+            <li>Add more</li>
+        </ul>
+    </div>
+</div>
 {% endblock %}
