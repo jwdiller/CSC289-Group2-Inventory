@@ -76,14 +76,14 @@ def stocksignup(request):
 		if form.is_valid():
 			productName = form.data.get('productName')
 			productCost = int(form.data.get('cents'))
-			productAmount = int(form.data.get('number'))
+			productAmount = int(form.data.get('amount'))
 			if (profanity.contains_profanity(productName)):
 				messages.error(request,('Inappropriate/Invalid product name, please try again!'))
 			else:
-				if (productCost < 1 or productCost > 1000000): # Acceptable range is $0.01 - $10,000 dollars
+				if (productCost < 0 or productCost > 1000000): # Acceptable range is $0.01 - $10,000 dollars
 					messages.error(request,('Cents can\'t be less than 0 or greater than 1,000,000 (10,000 dollars), please try again!'))
 				else:
-					if (productAmount < 1 or productAmount > 1000):  # Acceptable range is 1 - 1000 'amount'
+					if (productAmount < 0 or productAmount > 1000):  # Acceptable range is 1 - 1000 'amount'
 						messages.error(request,('Amount can\'t be less than 0 or greater than 1,000, please try again!'))
 					else:
 						form.save()
@@ -101,10 +101,10 @@ def ordersignup(request):
 		if form.is_valid():
 			orderAmount = int(form.data.get('amount'))
 			orderCost = int(form.data.get('cents'))
-			if (orderAmount < 1 or orderAmount > 1000):  # Acceptable range is 1 - 1000 'amount'
+			if (orderAmount < 0 or orderAmount > 1000):  # Acceptable range is 1 - 1000 'amount'
 				messages.error(request,('Amount can\'t be less than 0 or greater than 1,000, please try again!'))
 			else:
-				if (orderCost < 1 or orderCost > 1000000):  # Acceptable range is $0.01 - $10,000 dollars
+				if (orderCost < 0 or orderCost > 1000000):  # Acceptable range is $0.01 - $10,000 dollars
 					messages.error(request,('Cents can\'t be less than 0 or greater than 1,000,000 (10,000 dollars), please try again!'))
 				else:
 					form.save()
@@ -122,10 +122,10 @@ def incomingsignup(request):
 		if form.is_valid():
 			orderAmount = int(form.data.get('amount'))
 			orderCost = int(form.data.get('cents'))
-			if (orderAmount < 1 or orderAmount > 1000):  # Acceptable range is 1 - 1000 'amount'
+			if (orderAmount < 0 or orderAmount > 1000):  # Acceptable range is 1 - 1000 'amount'
 				messages.error(request,('Amount can\'t be less than 0 or greater than 1,000, please try again!'))
 			else:
-				if (orderCost < 1 or orderCost > 1000000):  # Acceptable range is $0.01 - $10,000 dollars
+				if (orderCost < 0 or orderCost > 1000000):  # Acceptable range is $0.01 - $10,000 dollars
 					messages.error(request,('Cents can\'t be less than 0 or greater than 1,000,000 (10,000 dollars), please try again!'))
 				else:
 					form.save()
