@@ -30,7 +30,7 @@ class Stock(models.Model):
     productName = models.CharField(max_length=200, verbose_name="Product Name")
     upc = models.IntegerField(verbose_name="UPC") #ID for 'outside world'
     cents = models.IntegerField() #In cents - needs function wrapping. Not using float because of precision
-    amount = models.IntegerField(verbose_name="Amount") # Generic Item-Integer, Current Stock, so should be modified by new Orders and Incoming
+    amount = models.IntegerField(default=0,verbose_name="Amount") # Generic Item-Integer, Current Stock, so should be modified by new Orders and Incoming
     description = models.CharField(max_length=200, verbose_name="Description")
     supplierID = models.ForeignKey(Suppliers, on_delete=models.CASCADE, verbose_name="Supplier ID")
 
@@ -56,6 +56,14 @@ class Orders(models.Model):
         return str(self.date) + " " + str(self.stockID) + " " + str(self.shortnote)
     def price(self):
         return self.cents / 100
+    def save(self, *args, **kwargs):
+        # Call the original save() method
+        super().save(*args, **kwargs)
+
+        # Update the stock amount
+        stock = Stock.objects.get(id=self.stockID.id)
+        stock.amount -= self.amount
+        stock.save()
 
 # This creates the values that will be held in the Incoming database (Incoming Orders)
 class Incoming(models.Model):
@@ -73,3 +81,12 @@ class Incoming(models.Model):
         return str(self.date) + " " + str(self.stockID) + " " + str(self.shortnote)
     def price(self):
         return self.cents / 100
+
+    def save(self, *args, **kwargs):
+        # Call the original save() method
+        super().save(*args, **kwargs)
+
+        # Update the stock amount
+        stock = Stock.objects.get(id=self.stockID.id)
+        stock.amount += self.amount
+        stock.save()
