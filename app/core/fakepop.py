@@ -107,6 +107,12 @@ def fakeInOutModel():
             newIn.save()
             
 def populate(request):
+    Customers.objects.all().delete()
+    Suppliers.objects.all().delete()
+    Stock.objects.all().delete()
+    Orders.objects.all().delete()
+    Incoming.objects.all().delete()
+    random.seed(0)
     fakeCustomerModel()
     fakeSupplierModel()
     fakeStockModel()
