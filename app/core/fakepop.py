@@ -73,7 +73,7 @@ def fakeStockModel():
 def fakeInOutModel():
     numdays = 2000 # a bit over 5 years
     today = datetime.now()
-    userIDs = User.objects.get('id')
+    userIDs = User.objects.raw('SELECT id FROM auth_user')
     customerIDs = Customers.objects.raw('SELECT id FROM core_customers')
     supplierIDs = Suppliers.objects.raw('SELECT id FROM core_suppliers')
     stockIDs = Stock.objects.raw('SELECT id FROM core_stock')
@@ -85,7 +85,7 @@ def fakeInOutModel():
         day = today - timedelta(days = day)
         newOrder.date = day
         newOrder.customerId = random.choice(customerIDs)
-        stockIndex = random.randint(0,)
+        stockIndex = random.randint(0, u_stock-1)
         newOrder.stockID = stockIDs[stockIndex]
         amount = random.randint(1, 5)
         newOrder.amount = amount
@@ -110,6 +110,6 @@ def populate(request):
     fakeCustomerModel()
     fakeSupplierModel()
     fakeStockModel()
-    #fakeInOutModel()
+    fakeInOutModel()
     messages.success(request,('Populated Database'))
     return render(request, 'home.html', {})
