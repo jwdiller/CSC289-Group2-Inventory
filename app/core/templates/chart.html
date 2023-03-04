@@ -7,9 +7,23 @@
   {% endif %}
 {% endblock %}
 {% block content %}
-<div>
-    <canvas id="myChart"></canvas>
-</div>
+
+<ol id="timeslice_nav" style="display: flex; flex-flow: row; justify-content: space-around;">
+	<li><a href={% url 'query' month=3 id=currentID %}>03 Month</a></li>
+  <li><a href={% url 'query' month=12 id=currentID %}>12 Months</a></li>
+  <li><a href={% url 'query' month=60 id=currentID %}>60 Months</a></li>
+</ol>
+
+<div style="
+  display: flex;
+  flex-flow: row;
+">
+<ol style="float : left; width : 20%;">
+  {% for product in products %}
+  <li><a href={% url 'query' month=currentMonth id=product.id %}>{{ product }}</a></li>
+  {% endfor %}
+</ol>
+<canvas id="myChart"></canvas>
 
 <p>Data :</p>
 <p>
@@ -19,6 +33,7 @@
     {% endfor %}
     </ol>
 </p>
+</div>
   
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>

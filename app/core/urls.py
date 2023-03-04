@@ -26,5 +26,5 @@ urlpatterns = [
   path('populate', views.populate, name='populate'),
   
   #Custom Queries
-  path('query/month/<month>/id/<id>', views.query, name='query'),
+  path('query/month/<int:month>/id/<int:id>', views.query, name='query'),
 ]
