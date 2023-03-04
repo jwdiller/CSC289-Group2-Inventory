@@ -7,8 +7,8 @@
     {% if messages %}
         <ul>
             {% for message in messages %}
-                <li>{{ message }}</li>
-                {% endfor %}
+                <li><div class="alert {{ message.tags }}" role="alert">{{message}}</div></li>
+            {% endfor %}
         </ul>
     {% endif %}
       

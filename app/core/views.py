@@ -81,10 +81,6 @@ def stocksignup(request):
 			if (profanity.contains_profanity(productName)):
 				messages.error(request,('Inappropriate/Invalid product name, please try again!'))
 			else:
-				if (productCost < 0 or productCost > 1000000): # Acceptable range is $0.00 - $10,000 dollars
-					messages.error(request,('Cents can\'t be less than 0 or greater than 1,000,000 (10,000 dollars), please try again!'))
-				else:
-					if (productAmount < 0 or productAmount > 1000):  # Acceptable range is 0 - 1000 'amount'
 						messages.error(request,('Amount can\'t be less than 0 or greater than 1,000, please try again!'))
 					else:
 						form.save()
@@ -108,9 +104,12 @@ def ordersignup(request):
 				if (orderCost < 0 or orderCost > 1000000):  # Acceptable range is $0.01 - $10,000 dollars
 					messages.error(request,('Cents can\'t be less than 0 or greater than 1,000,000 (10,000 dollars), please try again!'))
 				else:
-					form.save()
-					messages.success(request,('Outgoing Order Added'))
-					return redirect('home')
+					if (orderAmount > Stock.objects.get(id=form.data.get('stockID')).amount):
+						messages.error(request,('Amount can\'t be greater than the amount in stock, please try again!'))
+					else:
+						form.save()
+						messages.success(request,('Outgoing Order Added'))
+						return redirect('home')
 	else:
 		form = OrderForm()
 	# formTitle is the Title for Tab, formHeader is human-readable on the page itself
