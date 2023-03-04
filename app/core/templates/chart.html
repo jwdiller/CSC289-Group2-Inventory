@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %}
+  {% if title %}
+  {{ title }}
+  {% else %}
+  Make Queries
+  {% endif %}
+{% endblock %}
+{% block content %}
+<div>
+    <canvas id="myChart"></canvas>
+</div>
+
+<p>Data :</p>
+<p>
+    <ol>
+    {% for item in data %}
+    <li>{{ item }}</li>
+    {% endfor %}
+    </ol>
+</p>
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+  <script>
+    const ctx = document.getElementById('myChart');
+
+    var myChart = new Chart(ctx, {
+      type: 'line',
+      options: {
+        scales: {
+          xAxes: [{
+            type: 'time',
+          }],
+        }
+      },
+      data: {
+        labels: ["2022-12-01T00:00:00Z", "2023-03-01T00:00:00Z"],
+        datasets: [{
+          label: 'Amount Sold',
+          data: [
+          {t : '2022-12-01:00:00:00Z', y : 50},
+          {t : '2022-12-24:19:26:19Z', y : 33},
+          {t : '2023-01-05:12:32:00Z', y : 56},
+          {t : '2023-01-17:05:43:00Z', y : 44},
+          {t : '2023-01-22:19:30:44Z', y : 41},
+          {t : '2023-01-31:01:31:08Z', y : 23},
+          {t : '2023-02-05:09:32:09Z', y : 32},
+          {t : '2023-02-12:23:33:20Z', y : 122},
+          {t : '2023-02-19:19:33:49Z', y : 55},
+          {t : '2023-02-26:19:34:15Z', y : 132},
+          {t : '2023-02-28:00:00:00Z', y : 43},
+          {t : '2023-02-28:21:05:53Z', y : 1},
+          ],
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+          ],
+          borderColor: [
+            'rgba(255,99,132,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1
+        }]
+      }
+    });
+  </script>
+{% endblock %}
