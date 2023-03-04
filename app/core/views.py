@@ -78,14 +78,20 @@ def stocksignup(request):
 			productName = form.data.get('productName')
 			productCost = int(form.data.get('cents'))
 			productAmount = int(form.data.get('amount'))
+			isValid = True
 			if (profanity.contains_profanity(productName)):
 				messages.error(request,('Inappropriate/Invalid product name, please try again!'))
-			else:
-						messages.error(request,('Amount can\'t be less than 0 or greater than 1,000, please try again!'))
-					else:
-						form.save()
-						messages.success(request,('Product Added'))
-						return redirect('home')
+				isValid = False
+			if (productCost < 0 or productCost > 1000000):  # Acceptable range is $0.01 - $10,000 dollars
+				messages.error(request,('Cents can\'t be less than 0 or greater than 1,000,000 (10,000 dollars), please try again!'))
+				isValid = False
+			if (productAmount < 0 or productAmount > 1000):  # Acceptable range is 1 - 1000 'amount'
+				messages.error(request,('Amount can\'t be less than 0 or greater than 1,000, please try again!'))
+				isValid = False
+			if isValid:
+				form.save()
+				messages.success(request,('Product Added'))
+				return redirect('home')
 	else:
 		form = StockForm()
 	# formTitle is the Title for Tab, formHeader is human-readable on the page itself
