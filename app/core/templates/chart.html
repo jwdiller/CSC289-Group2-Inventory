@@ -8,31 +8,34 @@
 {% endblock %}
 {% block content %}
 
-<ol id="timeslice_nav" style="display: flex; flex-flow: row; justify-content: space-around;">
+<ul id="timeslice_nav" style="display: flex; flex-flow: row; justify-content: space-around;">
 	<li><a href={% url 'query' month=3 id=currentID %}>03 Month</a></li>
   <li><a href={% url 'query' month=12 id=currentID %}>12 Months</a></li>
   <li><a href={% url 'query' month=60 id=currentID %}>60 Months</a></li>
-</ol>
+</ul>
 
 <div style="
   display: flex;
   flex-flow: row;
 ">
-<ol style="float : left; width : 20%;">
+<ul style="float : left; width : 20%;">
   {% for product in products %}
-  <li><a href={% url 'query' month=currentMonth id=product.id %}>{{ product }}</a></li>
+  <li><a href={% url 'query' month=currentMonth id=product.id %}>{{ product.productName }}</a></li>
   {% endfor %}
-</ol>
+</ul>
+
+<div id='section2' style="display: flex; flex-flow: column;">
 <canvas id="myChart"></canvas>
 
 <p>Data :</p>
 <p>
-    <ol>
+    <ul>
     {% for item in data %}
     <li>{{ item }}</li>
     {% endfor %}
-    </ol>
+    </ul>
 </p>
+</div>
 </div>
   
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
