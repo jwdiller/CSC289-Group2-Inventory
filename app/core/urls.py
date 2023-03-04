@@ -21,4 +21,10 @@ urlpatterns = [
   path('create/order', views.ordersignup, name='ordersignup'),
   path('create/incoming', views.incomingsignup, name='incomingsignup'),
   path('create/', views.signuphome, name ='signup-home'), # Also add this line to the general navbar base.html
+  
+  #populate for testing
+  path('populate', views.populate, name='populate'),
+  
+  #Custom Queries
+  path('query/month/<month>/id/<id>', views.query, name='query'),
 ]

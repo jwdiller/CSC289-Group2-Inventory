@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from better_profanity import profanity
+from .fakepop import *
 
 # Create your views here.
 
@@ -80,10 +81,6 @@ def stocksignup(request):
 			if (profanity.contains_profanity(productName)):
 				messages.error(request,('Inappropriate/Invalid product name, please try again!'))
 			else:
-				if (productCost < 0 or productCost > 1000000): # Acceptable range is $0.01 - $10,000 dollars
-					messages.error(request,('Cents can\'t be less than 0 or greater than 1,000,000 (10,000 dollars), please try again!'))
-				else:
-					if (productAmount < 0 or productAmount > 1000):  # Acceptable range is 1 - 1000 'amount'
 						messages.error(request,('Amount can\'t be less than 0 or greater than 1,000, please try again!'))
 					else:
 						form.save()
@@ -138,3 +135,16 @@ def incomingsignup(request):
 		form = IncomingForm()
 	# formTitle is the Title for Tab, formHeader is human-readable on the page itself
 	return render(request, 'core/create-entry.html', {'form': form, 'formTitle' : 'Create Incoming Order', 'formHeader' : 'Register an Incoming Order here'})
+
+def query(request, month, id):
+    query = '''
+    SELECT *
+    FROM core_orders
+    WHERE
+    date >= date('now', '-%s month')
+    AND
+    stockID_id = %s
+    '''
+    raw_data = Orders.objects.raw(query %(month, id))
+    title = 'Order Query for the last ' + str(month) + ' month(s) of Stock ID #' + str(id)
+    return render(request, 'chart.html', {'title' : title, 'data' : raw_data})
