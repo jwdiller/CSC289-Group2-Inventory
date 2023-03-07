@@ -1,39 +1,19 @@
 from django.shortcuts import render
 from .models import *
+from django.db import connection
+from datetime import *
+from dateutil.relativedelta import relativedelta  
 
 def getProducts():
     return Stock.objects.values('id', 'productName')
 
+def getOrders(month, id):
+    return Orders.objects.filter(date__gte=datetime.now() - relativedelta(months = month)).filter(stockID=id)
+
 def numbersold(request, month, id):
+    raw_data = getOrders(month, id)
+    title = 'Amound Sold for the last ' + str(month) + ' month(s) of Stock ID #' + str(id)
     products = getProducts()
-    currentAmount = 0
-    title = 'Moo'
-    return render(request, 'chart.html', {'title' : title, 'data' : [], 'currentMonth' : month, 'currentID' : id, 'products' : products, 'amt' : currentAmount, 'chartlabel' : 'Amount Sold'})
-
-def profit(request, month, id):
-    products = getProducts()
-    currentProfit = 0
-    title = 'Moo'
-    return render(request, 'chart.html', {'title' : title, 'data' : amount_over_time, 'currentMonth' : month, 'currentID' : id, 'products' : products, 'profit' : currentProfit, 'chartlabel' : 'Profits'})
-
-def numbersold2(request, month, id):
-    query = '''
-    SELECT *
-    FROM core_orders
-    WHERE
-    date >= date('now', '-%s month')
-    AND
-    stockID_id = %s
-    ORDER BY
-    date
-    '''
-    raw_data = Orders.objects.raw(query %(month, id))
-    title = 'Order Query for the last ' + str(month) + ' month(s) of Stock ID #' + str(id)
-    query2 = '''
-    SELECT id, productName
-    FROM core_stock
-    '''
-    products = Stock.objects.raw(query2)
     
     amount_over_time = []
     currentAmount = 0
@@ -47,24 +27,10 @@ def numbersold2(request, month, id):
 ## !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ## !!! MUST ADD IN INCOMING ORDERS IN ORDER TO FINISH !!!
 ## !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-def profit2(request, month, id):
-    query = '''
-    SELECT *
-    FROM core_orders
-    WHERE
-    date >= date('now', '-%s month')
-    AND
-    stockID_id = %s
-    ORDER BY
-    date
-    '''
-    raw_data = Orders.objects.raw(query %(month, id))
-    title = 'Order Query for the last ' + str(month) + ' month(s) of Stock ID #' + str(id)
-    query2 = '''
-    SELECT id, productName
-    FROM core_stock
-    '''
-    products = Stock.objects.raw(query2)
+def profit(request, month, id):
+    raw_data = getOrders(month, id)
+    title = 'Profit for the last ' + str(month) + ' month(s) of Stock ID #' + str(id)
+    products = getProducts()
     
     amount_over_time = []
     currentProfit = 0
