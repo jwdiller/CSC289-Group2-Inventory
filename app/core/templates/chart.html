@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load render_table from django_tables2 %}
 {% block title %}
   {% if title %}
   {{ title }}
@@ -8,10 +9,20 @@
 {% endblock %}
 {% block content %}
 
+<ul id="querytype_nav" style="display: flex; flex-flow: row; justify-content: space-around;">
+	<li><a href={% url 'profit' month=currentMonth id=currentID %}>Profits</a></li>
+  <li><a href={% url 'numsold' month=currentMonth id=currentID %}>Amount Sold</a></li>
+</ul>
 <ul id="timeslice_nav" style="display: flex; flex-flow: row; justify-content: space-around;">
-	<li><a href={% url 'query' month=3 id=currentID %}>03 Month</a></li>
-  <li><a href={% url 'query' month=12 id=currentID %}>12 Months</a></li>
-  <li><a href={% url 'query' month=60 id=currentID %}>60 Months</a></li>
+  {% if amt %}
+	  <li><a href={% url 'numsold' month=3 id=currentID %}>03 Months</a></li>
+    <li><a href={% url 'numsold' month=12 id=currentID %}>12 Months</a></li>
+    <li><a href={% url 'numsold' month=60 id=currentID %}>60 Months</a></li>
+  {% elif profit %}
+    <li><a href={% url 'profit' month=3 id=currentID %}>03 Months</a></li>
+    <li><a href={% url 'profit' month=12 id=currentID %}>12 Months</a></li>
+    <li><a href={% url 'profit' month=60 id=currentID %}>60 Months</a></li>
+  {% endif %}
 </ul>
 
 <div style="
@@ -19,22 +30,37 @@
   flex-flow: row;
 ">
 <ul style="float : left; width : 20%;">
-  {% for product in products %}
-  <li><a href={% url 'query' month=currentMonth id=product.id %}>{{ product.productName }}</a></li>
-  {% endfor %}
+  {% if amt %}
+    {% for product in products %}
+      <li><a href={% url 'numsold' month=currentMonth id=product.id %}>{{ product.productName }}</a></li>
+    {% endfor %}
+  {% elif profit %}
+    {% for product in products %}
+      <li><a href={% url 'profit' month=currentMonth id=product.id %}>{{ product.productName }}</a></li>
+    {% endfor %}
+  {% endif %}
 </ul>
 
-<div id='section2' style="display: flex; flex-flow: column;">
+<div id='section2' style="display: flex; flex-flow: column; width:90%;">
 <canvas id="myChart"></canvas>
 
-<p>Data :</p>
-<p>
-    <ul>
-    {% for item in data %}
-    <li>{{ item }}</li>
-    {% endfor %}
-    </ul>
-</p>
+{% if title %}
+  <p>
+    {% if data %}
+      {% if amt %}
+        {{ amt }} sold
+      {% elif profit %}
+        Made ${{ profit }}
+      {% endif %}
+      in the past {{ currentMonth }} months.
+    {% else %}
+        There are no entries in the {{title}} Query.
+    {% endif %}
+  </p>
+{% else %}
+    <p>This is where you can see the Queries</p>
+{% endif %}
+</div>
 </div>
 </div>
   
@@ -50,25 +76,27 @@
           xAxes: [{
             type: 'time',
           }],
+          yAxes: [{
+            min : 0,
+            ticks : {
+              min : 0
+          }
+          }],
         }
       },
       data: {
-        labels: ["2022-12-01T00:00:00Z", "2023-03-01T00:00:00Z"],
+        labels: [
+        {% for row in data %}
+        '{{ row.t }}',
+        {% endfor %}
+        ],
         datasets: [{
-          label: 'Amount Sold',
+          lineTension: .1,
+          label: '{{ chartlabel }}',
           data: [
-          {t : '2022-12-01:00:00:00Z', y : 50},
-          {t : '2022-12-24:19:26:19Z', y : 33},
-          {t : '2023-01-05:12:32:00Z', y : 56},
-          {t : '2023-01-17:05:43:00Z', y : 44},
-          {t : '2023-01-22:19:30:44Z', y : 41},
-          {t : '2023-01-31:01:31:08Z', y : 23},
-          {t : '2023-02-05:09:32:09Z', y : 32},
-          {t : '2023-02-12:23:33:20Z', y : 122},
-          {t : '2023-02-19:19:33:49Z', y : 55},
-          {t : '2023-02-26:19:34:15Z', y : 132},
-          {t : '2023-02-28:00:00:00Z', y : 43},
-          {t : '2023-02-28:21:05:53Z', y : 1},
+          {% for row in data %}
+          { t : '{{ row.t }}', y : {{row.y}} },
+          {% endfor %}
           ],
           backgroundColor: [
             'rgba(255, 99, 132, 0.2)',

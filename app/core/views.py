@@ -3,12 +3,14 @@ import random # for the about page, can delete later
 from .models import * # All models for the databases
 from .forms import * #For forms
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect
 from better_profanity import profanity
 from .fakepop import *
+from .query import *
 from .query_data import find_top_amount
 from .tables import *
+
 # Create your views here.
 
 def isAuthorized(request): #need to write this
@@ -146,17 +148,3 @@ def incomingsignup(request):
 		form = IncomingForm()
 	# formTitle is the Title for Tab, formHeader is human-readable on the page itself
 	return render(request, 'core/create-entry.html', {'form': form, 'formTitle' : 'Create Incoming Order', 'formHeader' : 'Register an Incoming Order here'})
-
-def query(request, month, id):
-    query = '''
-    SELECT *
-    FROM core_orders
-    WHERE
-    date >= date('now', '-%s month')
-    AND
-    stockID_id = %s
-    '''
-    raw_data = Orders.objects.raw(query %(month, id))
-    title = 'Order Query for the last ' + str(month) + ' month(s) of Stock ID #' + str(id)
-    return render(request, 'chart.html', {'title' : title, 'data' : raw_data})
- 

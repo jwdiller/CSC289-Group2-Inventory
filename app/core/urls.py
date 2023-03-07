@@ -1,6 +1,6 @@
 from django.urls import path
 from .forms import *
-from . import views
+from . import views, query
 
 # These represent the url locations for each page
 urlpatterns = [
@@ -26,5 +26,6 @@ urlpatterns = [
   path('populate', views.populate, name='populate'),
   
   #Custom Queries
-  path('query/month/<int:month>/id/<int:id>', views.query, name='query'),
+  path('chart/sold/month/<int:month>/id/<int:id>', query.numbersold, name='numsold'),
+  path('chart/profit/month/<int:month>/id/<int:id>', query.profit, name='profit'),
 ]
