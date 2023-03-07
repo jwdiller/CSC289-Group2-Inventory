@@ -1,7 +1,21 @@
 from django.shortcuts import render
 from .models import *
 
+def getProducts():
+    return Stock.objects.values('id', 'productName')
+
 def numbersold(request, month, id):
+    products = getProducts()
+    currentAmount = 0
+    title = 'Moo'
+    return render(request, 'chart.html', {'title' : title, 'data' : [], 'currentMonth' : month, 'currentID' : id, 'products' : products, 'amt' : currentAmount, 'chartlabel' : 'Amount Sold'})
+
+def profit(request, month, id):
+    currentProfit = 0
+    title = 'Moo'
+    return render(request, 'chart.html', {'title' : title, 'data' : amount_over_time, 'currentMonth' : month, 'currentID' : id, 'products' : products, 'profit' : currentProfit, 'chartlabel' : 'Profits'})
+
+def numbersold2(request, month, id):
     query = '''
     SELECT *
     FROM core_orders
@@ -32,7 +46,7 @@ def numbersold(request, month, id):
 ## !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ## !!! MUST ADD IN INCOMING ORDERS IN ORDER TO FINISH !!!
 ## !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-def profit(request, month, id):
+def profit2(request, month, id):
     query = '''
     SELECT *
     FROM core_orders
