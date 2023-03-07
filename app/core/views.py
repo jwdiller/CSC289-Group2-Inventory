@@ -3,10 +3,11 @@ import random # for the about page, can delete later
 from .models import * # All models for the databases
 from .forms import * #For forms
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect
 from better_profanity import profanity
 from .fakepop import *
+from .query import *
 
 # Create your views here.
 
@@ -145,12 +146,22 @@ def query(request, month, id):
     date >= date('now', '-%s month')
     AND
     stockID_id = %s
+    ORDER BY
+    date
     '''
     raw_data = Orders.objects.raw(query %(month, id))
     title = 'Order Query for the last ' + str(month) + ' month(s) of Stock ID #' + str(id)
     query2 = '''
-    SELECT id, name
+    SELECT id, productName
     FROM core_stock
     '''
-    products = Stock.objects.all()
-    return render(request, 'chart.html', {'title' : title, 'data' : raw_data, 'currentMonth' : month, 'currentID' : id, 'products' : products})
+    products = Stock.objects.raw(query2)
+    
+    amount_over_time = []
+    currentAmount = 0
+    #(row.y).strftime('%Y-%m-%d:%H:%M:%SZ')
+    for order in raw_data:
+        currentAmount = currentAmount + order.amount
+        amount_over_time.append({ 't' : order.date.strftime('%Y-%m-%d:%H:%M:%SZ'), 'y' : currentAmount})
+    
+    return render(request, 'chart.html', {'title' : title, 'data' : amount_over_time, 'currentMonth' : month, 'currentID' : id, 'products' : products, 'amt' : currentAmount})
