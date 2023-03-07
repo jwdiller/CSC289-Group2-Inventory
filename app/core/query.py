@@ -11,6 +11,7 @@ def numbersold(request, month, id):
     return render(request, 'chart.html', {'title' : title, 'data' : [], 'currentMonth' : month, 'currentID' : id, 'products' : products, 'amt' : currentAmount, 'chartlabel' : 'Amount Sold'})
 
 def profit(request, month, id):
+    products = getProducts()
     currentProfit = 0
     title = 'Moo'
     return render(request, 'chart.html', {'title' : title, 'data' : amount_over_time, 'currentMonth' : month, 'currentID' : id, 'products' : products, 'profit' : currentProfit, 'chartlabel' : 'Profits'})
