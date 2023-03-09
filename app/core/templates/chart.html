@@ -18,7 +18,7 @@
 	  <li><a href={% url 'numsold' month=3 id=currentID %}>03 Months</a></li>
     <li><a href={% url 'numsold' month=12 id=currentID %}>12 Months</a></li>
     <li><a href={% url 'numsold' month=60 id=currentID %}>60 Months</a></li>
-  {% elif profit %}
+  {% else %}
     <li><a href={% url 'profit' month=3 id=currentID %}>03 Months</a></li>
     <li><a href={% url 'profit' month=12 id=currentID %}>12 Months</a></li>
     <li><a href={% url 'profit' month=60 id=currentID %}>60 Months</a></li>
@@ -34,7 +34,7 @@
     {% for product in products %}
       <li><a href={% url 'numsold' month=currentMonth id=product.id %}>{{ product.productName }}</a></li>
     {% endfor %}
-  {% elif profit %}
+  {% else %}
     {% for product in products %}
       <li><a href={% url 'profit' month=currentMonth id=product.id %}>{{ product.productName }}</a></li>
     {% endfor %}
@@ -60,7 +60,6 @@
 {% else %}
     <p>This is where you can see the Queries</p>
 {% endif %}
-</div>
 </div>
 </div>
   
