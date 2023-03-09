@@ -37,7 +37,7 @@
     {% if tableitems %}
         {% render_table tableitems %}
     {% else %}
-        There are no entries in the {{title}} Database.
+        <span style="color: red;">There are no entries in the {{title}} Database.</span>
     {% endif %}
 {% else %}
     This is where you can see the databases
