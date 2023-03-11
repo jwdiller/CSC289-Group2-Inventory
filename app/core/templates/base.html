@@ -15,12 +15,20 @@
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 					<li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+					{% if user.is_authenticated == False %}
 					<li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Log In</a></li>
+					{% endif %}
+					{% if user.is_authenticated == False %}
 					<li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Sign Up</a></li>
+					{% endif %}
+					
 					<li class="nav-item"><a class="nav-link" href="{% url 'DB-home' %}">Databases</a></li>
 					<li class="nav-item"><a class="nav-link" href="{% url 'profit' month=3 id=1%}">Charts</a></li>
 					<li class="nav-item"><a class="nav-link" href="{% url 'signup-home' %}">New Entries</a></li>
 					<li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
+					{% if user.is_authenticated %}
+						<li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Log Out</a></li>
+					{% endif %}
 				</ul>
 		</div>
 	</nav>
