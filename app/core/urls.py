@@ -23,7 +23,8 @@ urlpatterns = [
   path('create/', views.signuphome, name ='signup-home'), # Also add this line to the general navbar base.html
   
   #populate for testing
-  path('populate', views.populate, name='populate'),
+  path('reseed', views.repop, name='repop'),
+  path('populate/<int:days>', views.populate, name='populate'),
   
   #Custom Queries
   path('chart/sold/month/<int:month>/id/<int:id>', query.numbersold, name='numsold'),
