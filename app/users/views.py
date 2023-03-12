@@ -2,7 +2,9 @@ from django.shortcuts import render, redirect
 from .forms import UserRegisterForm
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate,logout
+from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
 
 # This initializes the register form that stores the data from the fields into the database
 def register(request):

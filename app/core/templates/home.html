@@ -4,7 +4,7 @@
 
 {% block content %}
 {% if messages %}
-	<ul>
+	<ul id="messageList">
 	{% for message in messages %}
 		<li><div class="alert {{ message.tags }}" role="alert">
             {{message}}
@@ -14,5 +14,10 @@
 {% endif %}
 <h1>
 Home Page
+<<<<<<< HEAD
 </h1>
 {% endblock %}
+=======
+</p>
+{% endblock %}
+>>>>>>> 31dd6ef8bdb094d1ed48093eceee6696456902da

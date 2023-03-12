@@ -79,4 +79,4 @@ James Diller <br>
 Aniketh Babu <br>
 Tomas Alvarez <br>
 Evan Spiering <br>
-David Smedburg <br>
+David Smedberg <br>
