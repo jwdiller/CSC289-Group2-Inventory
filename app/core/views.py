@@ -100,42 +100,44 @@ def stocksignup(request):
 
 # This function confirms that the form for the 'New Outgoing Order' page has been fully filled out, validates the data, and then saves its contents
 def ordersignup(request):
-	if request.method == 'POST':
-		form = OrderForm(request.POST)
-		if form.is_valid():
-			orderAmount = int(form.data.get('amount'))
-			orderCost = int(form.data.get('cents'))
-			if (orderAmount < 0 or orderAmount > 1000):  # Acceptable range is 1 - 1000 'amount'
-				messages.error(request,('Amount can\'t be less than 0 or greater than 1,000, please try again!'))
-			else:
-				if (orderCost < 0 or orderCost > 1000000):  # Acceptable range is $0.01 - $10,000 dollars
-					messages.error(request,('Cents can\'t be less than 0 or greater than 1,000,000 (10,000 dollars), please try again!'))
-				else:
-					form.save()
-					messages.success(request,('Outgoing Order Added'))
-					return redirect('home')
-	else:
-		form = OrderForm()
-	# formTitle is the Title for Tab, formHeader is human-readable on the page itself
-	return render(request, 'core/create-entry.html', {'form': form, 'formTitle' : 'Create Outgoing Order', 'formHeader' : 'Register an Outgoing Order here'})
+    alert_messages(request)
+    if request.method == 'POST':
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            orderAmount = int(form.data.get('amount'))
+            orderCost = int(form.data.get('cents'))
+            if (orderAmount < 0 or orderAmount > 1000):  # Acceptable range is 1 - 1000 'amount'
+                messages.error(request,('Amount can\'t be less than 0 or greater than 1,000, please try again!'))
+            else:
+                if (orderCost < 0 or orderCost > 1000000):  # Acceptable range is $0.01 - $10,000 dollars
+                    messages.error(request,('Cents can\'t be less than 0 or greater than 1,000,000 (10,000 dollars), please try again!'))
+                else:
+                    form.save()
+                    messages.success(request,('Outgoing Order Added'))
+                    return redirect('home')
+    else:
+        form = OrderForm()
+    # formTitle is the Title for Tab, formHeader is human-readable on the page itself
+    return render(request, 'core/create-entry.html', {'form': form, 'formTitle' : 'Create Outgoing Order', 'formHeader' : 'Register an Outgoing Order here'})
 
 # This function confirms that the form for the 'New Incoming Order' page has been fully filled out, validates the data, and then saves its contents
 def incomingsignup(request):
-	if request.method == 'POST':
-		form = IncomingForm(request.POST)
-		if form.is_valid():
-			orderAmount = int(form.data.get('amount'))
-			orderCost = int(form.data.get('cents'))
-			if (orderAmount < 0 or orderAmount > 1000):  # Acceptable range is 1 - 1000 'amount'
-				messages.error(request,('Amount can\'t be less than 0 or greater than 1,000, please try again!'))
-			else:
-				if (orderCost < 0 or orderCost > 1000000):  # Acceptable range is $0.01 - $10,000 dollars
-					messages.error(request,('Cents can\'t be less than 0 or greater than 1,000,000 (10,000 dollars), please try again!'))
-				else:
-					form.save()
-					messages.success(request,('Incoming Order Added'))
-					return redirect('home')
-	else:
-		form = IncomingForm()
-	# formTitle is the Title for Tab, formHeader is human-readable on the page itself
-	return render(request, 'core/create-entry.html', {'form': form, 'formTitle' : 'Create Incoming Order', 'formHeader' : 'Register an Incoming Order here'})
+    alert_messages(request)
+    if request.method == 'POST':
+        form = IncomingForm(request.POST)
+        if form.is_valid():
+            orderAmount = int(form.data.get('amount'))
+            orderCost = int(form.data.get('cents'))
+            if (orderAmount < 0 or orderAmount > 1000):  # Acceptable range is 1 - 1000 'amount'
+                messages.error(request,('Amount can\'t be less than 0 or greater than 1,000, please try again!'))
+            else:
+                if (orderCost < 0 or orderCost > 1000000):  # Acceptable range is $0.01 - $10,000 dollars
+                    messages.error(request,('Cents can\'t be less than 0 or greater than 1,000,000 (10,000 dollars), please try again!'))
+                else:
+                    form.save()
+                    messages.success(request,('Incoming Order Added'))
+                    return redirect('home')
+    else:
+        form = IncomingForm()
+    # formTitle is the Title for Tab, formHeader is human-readable on the page itself
+    return render(request, 'core/create-entry.html', {'form': form, 'formTitle' : 'Create Incoming Order', 'formHeader' : 'Register an Incoming Order here'})
