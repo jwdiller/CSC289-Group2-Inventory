@@ -4,6 +4,7 @@ from django.db import connection
 from datetime import *
 from dateutil.relativedelta import relativedelta 
 from django.db.models import Sum, F, Count
+from django.contrib.auth.models import User
 
 from django.contrib import messages
 
