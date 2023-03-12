@@ -8,8 +8,7 @@ from django.shortcuts import redirect
 from better_profanity import profanity
 from .fakepop import *
 from .query import *
-from .query_data import find_top_amount
-from .tables import *
+from .query2 import *
 
 # Create your views here.
 
@@ -18,12 +17,14 @@ def isAuthorized(request): #need to write this
 
 # Calls the home.html page for display
 def home(request):
-	return render(request, 'home.html', {})
+    alert_messages(request)
+    return render(request, 'home.html', {})
 
 # Generates random words and then calls the about.html page for display (using these words)
 # We most likely will change this later :/
 def about(request):
-	return render(request, 'about.html', {})
+    userIDs = User.objects.order_by('id')
+    return render(request, 'about.html', {'misc' : userIDs})
 
 # These will call the database.html file and send the responding database that will be shown for the user
 def customer(request):
@@ -38,11 +39,7 @@ def incoming(request):
 	return render(request, 'database.html', {'title' : 'Incoming', 'tableitems' : Incoming.objects.all})
 def dbhome(request):
 	return render(request, 'database.html', {})
-# Calls the top_5_stocks.html file, this html in question is linked to the core/query_data.py file on what data is displayed
-def top_5_stocks(request):
-	data = find_top_amount()
-	table = TopStocksTable(data)
-	return render(request, 'top_5_stocks.html', {'table': table})
+
 # Calls the create-entry.html file, this html in question is linked to the core/forms.py file on what form fields be displayed
 def signuphome(request):
 	return render(request, 'core/create-entry.html', {})
@@ -85,20 +82,18 @@ def stocksignup(request):
 			productName = form.data.get('productName')
 			productCost = int(form.data.get('cents'))
 			productAmount = int(form.data.get('amount'))
-			isValid = True
 			if (profanity.contains_profanity(productName)):
 				messages.error(request,('Inappropriate/Invalid product name, please try again!'))
-				isValid = False
-			if (productCost < 0 or productCost > 1000000):  # Acceptable range is $0.01 - $10,000 dollars
-				messages.error(request,('Cents can\'t be less than 0 or greater than 1,000,000 (10,000 dollars), please try again!'))
-				isValid = False
-			if (productAmount < 0 or productAmount > 1000):  # Acceptable range is 1 - 1000 'amount'
-				messages.error(request,('Amount can\'t be less than 0 or greater than 1,000, please try again!'))
-				isValid = False
-			if isValid:
-				form.save()
-				messages.success(request,('Product Added'))
-				return redirect('home')
+			else:
+				if (productCost < 0 or productCost > 1000000): # Acceptable range is $0.00 - $10,000 dollars
+					messages.error(request,('Cents can\'t be less than 0 or greater than 1,000,000 (10,000 dollars), please try again!'))
+				else:
+					if (productAmount < 0 or productAmount > 1000):  # Acceptable range is 0 - 1000 'amount'
+						messages.error(request,('Amount can\'t be less than 0 or greater than 1,000, please try again!'))
+					else:
+						form.save()
+						messages.success(request,('Product Added'))
+						return redirect('home')
 	else:
 		form = StockForm()
 	# formTitle is the Title for Tab, formHeader is human-readable on the page itself
@@ -117,12 +112,9 @@ def ordersignup(request):
 				if (orderCost < 0 or orderCost > 1000000):  # Acceptable range is $0.01 - $10,000 dollars
 					messages.error(request,('Cents can\'t be less than 0 or greater than 1,000,000 (10,000 dollars), please try again!'))
 				else:
-					if (orderAmount > Stock.objects.get(id=form.data.get('stockID')).amount):
-						messages.error(request,('Amount can\'t be greater than the amount in stock, please try again!'))
-					else:
-						form.save()
-						messages.success(request,('Outgoing Order Added'))
-						return redirect('home')
+					form.save()
+					messages.success(request,('Outgoing Order Added'))
+					return redirect('home')
 	else:
 		form = OrderForm()
 	# formTitle is the Title for Tab, formHeader is human-readable on the page itself
