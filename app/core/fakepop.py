@@ -164,7 +164,7 @@ def populate(request, days):
     messages.success(request,('Populated Database from ' + str(days) + ' days to today.'))
     return render(request, 'home.html', {})
             
-def repop(request, days):
+def repop(request, days=2000):
     Customers.objects.all().delete()
     Suppliers.objects.all().delete()
     Stock.objects.all().delete()
