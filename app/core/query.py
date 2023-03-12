@@ -169,6 +169,8 @@ def inventoryAlerts():
     return alertLists
 
 def alert_messages(request):
+    if not request.user.is_authenticated:
+        return
     alert = inventoryAlerts()
     tags = ['CriticalPriority', 'HighPriority', 'MediumPriority', 'LowPriority']
     for product in alert[0]:
