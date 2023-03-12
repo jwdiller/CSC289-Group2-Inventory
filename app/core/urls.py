@@ -1,7 +1,8 @@
 from django.urls import path
 from .forms import *
 from . import views, query
-
+from django.conf import settings
+from django.conf.urls.static import static
 # These represent the url locations for each page
 urlpatterns = [
 	path('about/', views.about, name='about'), #about us, experimental page
@@ -29,4 +30,4 @@ urlpatterns = [
   #Custom Queries
   path('chart/sold/month/<int:month>/id/<int:id>', query.numbersold, name='numsold'),
   path('chart/profit/month/<int:month>/id/<int:id>', query.profit, name='profit'),
-]
+]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
