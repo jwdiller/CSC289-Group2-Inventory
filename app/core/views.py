@@ -8,7 +8,6 @@ from django.shortcuts import redirect
 from better_profanity import profanity
 from .fakepop import *
 from .query import *
-from .query2 import *
 
 # Create your views here.
 
