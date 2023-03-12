@@ -23,7 +23,7 @@
 <div class = "login">  
   
     {% if messages %}  
-        <ul id="messageList">   
+        <ul id="messageList">
             {% for message in messages %}
             <li><div class="alert {{ message.tags }}" role="alert">
                 {{message}}
@@ -39,14 +39,12 @@
              {% csrf_token %}  
              {{ form|crispy }}
              <div class="form-group">
-                <button type="submit" id="register_button" class="btn btn-outline-info">Register</button>
+                <button type="submit" id="register_button" class="btn btn-outline-info">{{formTitle}}</button>
             </div>  
         </form>
     {% else %}
-        <p>You can create new entries here.</p>
+        <p>From here, you can add new customers, suppliers, products, incoming orders and outgoing orders.</p>
     {% endif %}
-
-
      </div>  
   
 {% endblock content %}
