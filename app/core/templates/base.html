@@ -18,10 +18,119 @@
 		.LowPriority {
 			background-color: lightgreen;
 		}
+
+		@font-face{
+  			font-family: 'myFirstFont';
+  			src: url("{% static 'images/MouseMemoirs-Regular.ttf' %}");
+		}
+
+		.selectdatewidget{
+			font-size: 20px;
+		}
+
+		#id_username, #id_password, #id_password1, #id_email, #id_shortnote, #id_note, #id_cents, #id_amount, 
+		#id_name, #id_phoneNumber, #id_productName, #id_upc, #id_description{
+			font-size: 22px;
+		}
+
+		.orderable{
+			font-family: 'myFirstFont';
+			font-size: 1.2em;
+			padding-left: 18px;
+			background-color:rgb(238, 204, 160);
+			
+		}
+
+		#register_button{
+			font-family: 'myFirstFont';
+			font-size: 25px;
+		}
+
+		.mb-3{
+			font-family: 'myFirstFont';
+			font-size: 25px;
+		}
+
+		.odd{
+			font-family: 'myFirstFont';
+			font-size: 20px;
+			padding-left: 18px;
+			
+		}
+
+		.even, td{
+			font-family: 'myFirstFont';
+			font-size: 20px;
+			padding-left: 18px;
+			
+		}
+
+		.orderable a{
+			color:#3333FF !important;
+		}
+
+		.nav-link{
+			font-family: 'myFirstFont';
+			font-size: 30px;
+		}
+
+		.navbar-brand{
+			font-family: 'myFirstFont';
+			font-size: 30px;
+		}
+
+		#homePage{
+			margin-top: 10px;
+			font-family: 'myFirstFont';
+			font-size: 30px;
+		}
+
+		h3{
+			margin-top: 10px;
+			font-family: 'myFirstFont';
+			font-size: 40px;
+		}
+
+		label{
+			margin-top: 20px;
+		}
+
+		h1{
+			margin-top: 20px;
+		}
+
+		.endbar{
+			margin: 20px;
+		}
+
+		.table1{
+			background-color: white;
+			border: solid black; 
+			font-family: 'myFirstFont';
+			font-size: 20px
+		}
+
+		body{
+			background-image: url("{% static 'images/icecream-image.jpg' %}");
+			
+		}
+	
+        h1 {
+			font-size: 50px;
+            text-align: center;
+            font-weight: bold;
+            color: #000;
+			font-family: 'myFirstFont';
+        }
 	</style>
 </head>
 <body>
+	<h1>Wake Ice Cream Small Inventory Manager</h1>
+    <div id="app"></div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="{% static 'app/js/main.js' %}"></script>
 	<header class="site-header">
+
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
 		<a class="navbar-brand" href="#">SIM</a>
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,24 +139,36 @@
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 					<li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+					{% if user.is_authenticated == False %}
 					<li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Log In</a></li>
+					{% endif %}
+					{% if user.is_authenticated == False %}
 					<li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Sign Up</a></li>
+					{% endif %}
+					
 					<li class="nav-item"><a class="nav-link" href="{% url 'DB-home' %}">Databases</a></li>
 					<li class="nav-item"><a class="nav-link" href="{% url 'profit' month=3 id=1%}">Charts</a></li>
 					<li class="nav-item"><a class="nav-link" href="{% url 'signup-home' %}">New Entries</a></li>
 					<li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
+					{% if user.is_authenticated %}
+						<li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Log Out</a></li>
+					{% endif %}
 				</ul>
 		</div>
 	</nav>
 </header>
 <main role="main" class="container">
+<div class="table1">
 	<div class="container">
 		{% block content %}
 		{% endblock %}
-	</div>
-	<div class="endbar">
+		
+		<div class="endbar">
 		©2023 The InterGalactic Pirate Support Group, powered by <a href="https://www.djangoproject.com" target="_blank">Django</a>, <a href="https://getbootstrap.com" target="_blank">BootStrap<a>, <a href="https://django-crispy-forms.readthedocs.io/en/latest/" target="_blank">Crispy Forms</a>
 	</div>
+	</div>
+	
+</div>
 </main>
 </body>
 <!-- Bootstrap JS -->

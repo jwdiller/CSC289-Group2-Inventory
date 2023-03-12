@@ -4,6 +4,7 @@ from django.db import connection
 from datetime import *
 from dateutil.relativedelta import relativedelta 
 from django.db.models import Sum, F, Count
+
 from django.contrib import messages
 
 def getProducts():
@@ -17,8 +18,10 @@ def getTransactions(month, id):
     incom = Incoming.objects.annotate(trueCents=F('cents') * -1).only('date', 'cents').filter(date__gte=datetime.now() - relativedelta(months = month)).filter(stockID=id)
     return order.union(incom).order_by('date')
 
+
 def formatDate(raw_date):
     return raw_date.strftime('%Y-%m-%d:%H:%M:%SZ')
+
 
 def getProductsAmounts():
     return Stock.objects.values('id', 'productName', 'amount')
@@ -53,10 +56,8 @@ def numbersold(request, month, id):
 
 def profit(request, month, id):
     raw_data = getTransactions(month, id)
-
     title = 'Profit for the last ' + str(month) + ' month(s) of Stock ID #' + str(id)
     products = getProducts()
-    
     amount_over_time = [{'t' : formatDate(datetime.now() - relativedelta(months = month)), 'y' : 0}]
     currentProfit = 0
     for order in raw_data:
