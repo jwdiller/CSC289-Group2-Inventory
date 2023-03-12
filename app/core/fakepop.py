@@ -50,22 +50,22 @@ def fakeSupplierModel():
         new.save()
         
 def fakeStockModel():
-    brands = ["Acme", "Raynor's", "Piratastic"]
-    flavors = ["Vanilla", "Chocolate", "Strawberry"]
-    sizes = ['Pint', 'Half Gallon']
+    brands = {"Acme" : 1, "Raynor's" : 1.2, "Piratastic" : 1.5,}
+    flavors = {"Vanilla" : 1, "Chocolate" : 1.4, "Strawberry" : 1.25}
+    sizes = {'Pint' : 1, 'Half Gallon' : 2}
     sIDs = Suppliers.objects.raw('SELECT id FROM core_suppliers')
-    num_brands = len(brands)
-    for i in range(num_brands):
+    #num_brands = len(brands)
+    for brand, supplier in zip(brands, sIDs):
         for flavor in flavors:
             for size in sizes:
-                brand = brands[i]
+                #brand = brands[i]
                 new = Stock()
                 new.productName = brand + " " + flavor + " " + size + " Ice Cream"
                 new.upc = random.randint(0, 1000000)
-                new.cents = random.randint(199, 799)
-                new.amount = random.randint(10, 100)
+                new.cents = random.randint(150, 200) + (brands[brand] * flavors[flavor] * sizes[size])
+                new.amount = 100
                 new.description = ''
-                new.supplierID = sIDs[i]
+                new.supplierID = supplier
                 new.save()
                 
 #["userId", "customerId", "stockID", "amount", "date", "shortnote", "note", "cents"]
@@ -106,7 +106,65 @@ def fakeInOutModel():
             newIn.cents = random.randint(25, 199) * amount
             newIn.save()
             
-def populate(request):
+def fakeInOut2(days):
+    numdays = days # 2000 for five years
+    today = datetime.now()
+    
+    userIDs = User.objects.order_by('id')
+    customerIDs = Customers.objects.raw('SELECT id FROM core_customers')
+    stocks = Stock.objects.raw('SELECT id, cents, supplierID_id FROM core_stock')
+    supplierIDs = Suppliers.objects.raw('SELECT id FROM core_suppliers')
+    
+    stockAmounts = {}
+    restoreAmount = 70
+    for stock in stocks:
+        stockAmounts[stock] = 100
+    
+    for day in range(numdays, 0, -1):
+        currentday = today - timedelta(days=day)
+        if day % 7 == 0:
+            for stock, amount in zip(stocks, stockAmounts):
+                if stockAmounts[amount] <= 30:
+                    newIncom = Incoming()
+                    newIncom.date = currentday
+                    newIncom.userId = userIDs[0]
+                    newIncom.amount = restoreAmount
+                    newIncom.shortnote = ''
+                    newIncom.note = ''
+                    stockAmounts[amount] = stockAmounts[amount] + restoreAmount
+                    newIncom.stockID = stock
+                    #newIncom.supplierId = stock['supplierID_id']
+                    newIncom.supplierId = random.choice(supplierIDs)
+                    newIncom.cents = int(restoreAmount * product.cents * random.uniform(.25, .5))
+                    newIncom.save()
+        else:
+            onRegister = random.choice(userIDs)
+            for customer in customerIDs:
+                if random.randint(1, 4) == 1:
+                    newOrder = Orders()
+                    newOrder.userId = onRegister
+                    newOrder.shortnote = ''
+                    newOrder.note = ''
+                    newOrder.customerId = customer
+                    amount = random.randint(1, 5)
+                    newOrder.amount = amount
+                    
+                    product = random.choice(stocks)
+                    newOrder.stockID = product
+                    newOrder.cents = int(amount * product.cents * random.uniform(1.1, 1.5))
+                    
+                    newOrder.date = currentday + timedelta(hours=random.randint(0,23), minutes=random.randint(0,59), seconds=random.randint(0,59))
+                    
+                    stockAmounts[product] = stockAmounts[product] - amount
+                    
+                    newOrder.save()
+
+def populate(request, days):
+    fakeInOut2(days)
+    messages.success(request,('Populated Database from ' + str(days) + ' days to today.'))
+    return render(request, 'home.html', {})
+            
+def repop(request, days):
     Customers.objects.all().delete()
     Suppliers.objects.all().delete()
     Stock.objects.all().delete()
@@ -116,6 +174,6 @@ def populate(request):
     fakeCustomerModel()
     fakeSupplierModel()
     fakeStockModel()
-    fakeInOutModel()
-    messages.success(request,('Populated Database'))
+    fakeInOut2(days)
+    messages.success(request,('Repopulated Database'))
     return render(request, 'home.html', {})
