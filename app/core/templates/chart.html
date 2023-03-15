@@ -9,19 +9,22 @@
 {% endblock %}
 {% block content %}
 <ul id="querytype_nav" style="display: flex; flex-flow: row; justify-content: space-around; padding: 5px;" class="nav nav-pills nav-justified navbar-nav me-auto mb-2 mb-lg-0">
-	<li class="nav-item"><a href={% url 'profit' month=currentMonth id=currentID %} class="btn btn-info" style="width:50%">Profits</a></li>
-  <li class="nav-item"><a href={% url 'numsold' month=currentMonth id=currentID %} class="btn btn-info" style="width:50%">Amount Sold</a></li>
+  {% if currentFunc == 'numsold' %}
+	  <li class="nav-item"><a href={% url 'profit' month=currentMonth id=currentID %} class="btn btn-info" style="width:50%">Profits</a></li>
+    <li class="nav-item"><a class="btn btn-info disabled" style="width:50%">Amount Sold</a></li>
+  {% else %}
+    <li class="nav-item"><a class="btn btn-info disabled" style="width:50%">Profits</a></li>
+    <li class="nav-item"><a href={% url 'numsold' month=currentMonth id=currentID %} class="btn btn-info" style="width:50%">Amount Sold</a></li>
+  {% endif %}
 </ul>
 <ul id="timeslice_nav" style="display: flex; flex-flow: row; justify-content: space-around; padding: 5px;" class="nav nav-pills nav-justified navbar-nav me-auto mb-2 mb-lg-0">
-  {% if amt %}
-	  <li><a href={% url 'numsold' month=3 id=currentID %} class="btn btn-info">03 Months</a></li>
-    <li><a href={% url 'numsold' month=12 id=currentID %} class="btn btn-info">12 Months</a></li>
-    <li><a href={% url 'numsold' month=60 id=currentID %} class="btn btn-info">60 Months</a></li>
-  {% else %}
-    <li><a href={% url 'profit' month=3 id=currentID %} class="btn btn-info">03 Months</a></li>
-    <li><a href={% url 'profit' month=12 id=currentID %} class="btn btn-info">12 Months</a></li>
-    <li><a href={% url 'profit' month=60 id=currentID %} class="btn btn-info">60 Months</a></li>
-  {% endif %}
+  {% for i in monthSlice %}
+    {% if i == currentMonth %}
+      <li><a class="btn btn-info disabled">{{i}} Months</a></li>
+    {% else %}
+      <li><a href={% url currentFunc month=i id=currentID %} class="btn btn-info">{{i}} Months</a></li>
+    {% endif %}
+  {% endfor %}
 </ul>
 
 <div style="
@@ -29,15 +32,13 @@
   flex-flow: row;
 ">
 <ul style="float : left; width : 20%; list-style-type: none;">
-  {% if amt %}
     {% for product in products %}
-      <li><a href={% url 'numsold' month=currentMonth id=product.id %} class="btn btn-info">{{ product.productName }}</a></li>
+      {% if product.id == currentID %}
+        <li><a class="btn btn-info disabled">{{ product.productName }}</a></li>
+      {% else %}
+        <li><a href={% url currentFunc month=currentMonth id=product.id %} class="btn btn-info">{{ product.productName }}</a></li>
+      {% endif %}
     {% endfor %}
-  {% else %}
-    {% for product in products %}
-      <li><a href={% url 'profit' month=currentMonth id=product.id %} class="btn btn-info">{{ product.productName }}</a></li>
-    {% endfor %}
-  {% endif %}
 </ul>
 
 <div id='section2' style="display: flex; flex-flow: column; width:90%;">
@@ -49,7 +50,7 @@
     {% if data %}
       {{ product.productName }}
       {% if amt %}
-        {{ amt }} sold
+      sold {{ amt }} units
       {% elif profit %}
         made ${{ profit }}
       {% endif %}
