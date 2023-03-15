@@ -1,10 +1,23 @@
 @font-face{
-    font-family: 'myFirstFont';
-    src: url("/static/images/MouseMemoirs-Regular.ttf");
+    font-family: 'Courier New';
 }
 
 .selectdatewidget{
-  font-size: 20px;
+  font-size: 15px;
+}
+
+#title{
+  justify-content: center;
+  display:inline-block;
+  width:fit-content;
+  text-align: center;
+  color: black;
+  -webkit-text-stroke: 2px white;
+  background-color:rgba(255, 255, 255, 50%);
+}
+
+.container{
+  background-color:rgba(255, 255, 255, 50%);
 }
 
 #id_username, #id_password, #id_password1, #id_email, #id_shortnote, #id_note, #id_cents, #id_amount, 
@@ -13,33 +26,28 @@
 }
 
 .orderable{
-  font-family: 'myFirstFont';
-  font-size: 1.2em;
+  font-size: 0.8em;
   padding-left: 18px;
   background-color:rgb(238, 204, 160);
   
 }
 
 #register_button{
-  font-family: 'myFirstFont';
   font-size: 25px;
 }
 
 .mb-3{
-  font-family: 'myFirstFont';
-  font-size: 25px;
+  font-size: 18.75px;
 }
 
 .odd{
-  font-family: 'myFirstFont';
-  font-size: 20px;
+  font-size: 15px;
   padding-left: 18px;
   
 }
 
 .even, td{
-  font-family: 'myFirstFont';
-  font-size: 20px;
+  font-size: 15px;
   padding-left: 18px;
   
 }
@@ -49,25 +57,21 @@
 }
 
 .nav-link{
-  font-family: 'myFirstFont';
-  font-size: 30px;
+  font-size: 22.5px;
 }
 
 .navbar-brand{
-  font-family: 'myFirstFont';
-  font-size: 30px;
+  font-size: 22.5px;
 }
 
 #homePage{
   margin-top: 10px;
-  font-family: 'myFirstFont';
-  font-size: 30px;
+  font-size: 22.5px;
 }
 
 h3{
   margin-top: 10px;
-  font-family: 'myFirstFont';
-  font-size: 40px;
+  font-size: 22.5px;
 }
 
 label{
@@ -85,18 +89,18 @@ h1{
 .table1{
   background-color: white;
   border: solid black; 
-  font-family: 'myFirstFont';
-  font-size: 20px;
+  font-size: 15px
 }
 
-body{
-  background-image: url("/static/images/icecream-image.jpg");
+body {
+  background-image: url("/static/images/bunch-of-watches-and-clocks.jpg");
+  background-size: 100%;
+  font-family: 'Courier New';
 }
 
 h1 {
-  font-size: 50px;
+  font-size: 37.5px;
   text-align: center;
   font-weight: bold;
   color: #000;
-  font-family: 'myFirstFont';
 }

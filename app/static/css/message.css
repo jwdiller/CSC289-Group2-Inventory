@@ -1,0 +1,19 @@
+#messageList {
+    list-style-type: none;
+}
+
+.CriticalPriority {
+    background-color: #FF7F7F;
+}
+.HighPriority {
+    background-color: #FF9F7F;
+}
+.MediumPriority {
+    background-color: #FFFF7f;
+}
+.LowPriority {
+    background-color: lightgreen;
+}
+.success {
+    background-color: lightgreen;
+}
