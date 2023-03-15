@@ -19,18 +19,25 @@ class SupplierForm(forms.ModelForm):
 class StockForm(forms.ModelForm):
 	class Meta:
 		model = Stock
-		fields = ["productName", "upc",	"cents", "amount", "description", "supplierID"]
+		fields = ["productName", "upc",	"price", "amount", "description", "supplierID"]
 
 # This creates the outgoing order form fields for the "New Outgoing Order" page
 class OrderForm(forms.ModelForm):
-	date = forms.DateField(widget=forms.SelectDateWidget)
+	#date = forms.DateField(widget=forms.SelectDateWidget, initial=datetime.now())
+	stockID = forms.ModelChoiceField(queryset=Stock.objects.all(), label = "Stock ID")
+	stockID.widget.attrs.update({'onchange' : 'onChangeStock()'})
+	amount = forms.IntegerField(help_text="Limit to Maximum Current Stock")
+	amount.widget.attrs.update({'oninput' : "onChangeAmount()"})
+	price = forms.DecimalField(help_text="Per Unit Price")
+	price.widget.attrs.update({'oninput' : 'onChangePrice()'})
 	class Meta:
 		model = Orders
-		fields = ["userId", "customerId", "stockID", "amount", "date", "shortnote", "note", "cents"]
+		fields = ["customerId", "stockID", "amount",  "price", "shortnote", "note",]
+		labels = {'stockID' : 'Stock ID'}
 
 # This creates the incoming order form fields for the "New Incoming Order" page
 class IncomingForm(forms.ModelForm):
-    date = forms.DateField(widget=forms.SelectDateWidget)
+    #date = forms.DateField(widget=forms.SelectDateWidget, initial=datetime.now())
     class Meta:
         model = Incoming
-        fields = ["userId", "supplierId", "stockID", "amount", "date", "shortnote", "note", "cents"]
+        fields = ["supplierId", "stockID", "amount", "price", "shortnote", "note",]

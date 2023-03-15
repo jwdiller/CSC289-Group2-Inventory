@@ -62,13 +62,13 @@ def fakeStockModel():
                 new = Stock()
                 new.productName = brand + " " + flavor + " " + size + " Ice Cream"
                 new.upc = random.randint(0, 1000000)
-                new.cents = random.randint(150, 200) + (brands[brand] * flavors[flavor] * sizes[size])
+                new.price = (random.randrange(150, 200)/100) + (brands[brand] * flavors[flavor] * sizes[size])
                 new.amount = 100
                 new.description = ''
                 new.supplierID = supplier
                 new.save()
                 
-#["userId", "customerId", "stockID", "amount", "date", "shortnote", "note", "cents"]
+#["userId", "customerId", "stockID", "amount", "date", "shortnote", "note", "price"]
 
 def fakeInOutModel():
     numdays = 2000 # a bit over 5 years
@@ -92,7 +92,7 @@ def fakeInOutModel():
         stockAmounts[stockIndex] = stockAmounts[stockIndex] - amount
         newOrder.shortnote = ''
         newOrder.note = ''
-        newOrder.cents = random.randint(199, 799) * amount
+        newOrder.price = amount * (1.25) * Stock.objects.values('price').filter(id=newOrder.stockID)[0]
         newOrder.save()
         if stockAmounts[stockIndex] < 30:
             newIn = Incoming()
@@ -103,7 +103,7 @@ def fakeInOutModel():
             newIn.date = day
             newIn.shortnote = ''
             newIn.note = ''
-            newIn.cents = random.randint(25, 199) * amount
+            newIn.price = amount * (.75) * Stock.objects.values('price').filter(id=newOrder.stockID)[0]
             newIn.save()
             
 def fakeInOut2(days):
@@ -112,7 +112,7 @@ def fakeInOut2(days):
     
     userIDs = User.objects.order_by('id')
     customerIDs = Customers.objects.raw('SELECT id FROM core_customers')
-    stocks = Stock.objects.raw('SELECT id, cents, supplierID_id FROM core_stock')
+    stocks = Stock.objects.raw('SELECT id, price, supplierID_id FROM core_stock')
     supplierIDs = Suppliers.objects.raw('SELECT id FROM core_suppliers')
     
     stockAmounts = {}
@@ -135,7 +135,7 @@ def fakeInOut2(days):
                     newIncom.stockID = stock
                     #newIncom.supplierId = stock['supplierID_id']
                     newIncom.supplierId = random.choice(supplierIDs)
-                    newIncom.cents = int(restoreAmount * product.cents * random.uniform(.25, .5))
+                    newIncom.price = restoreAmount * product.price * random.randrange(25,50) / 100
                     newIncom.save()
         else:
             onRegister = random.choice(userIDs)
@@ -148,15 +148,11 @@ def fakeInOut2(days):
                     newOrder.customerId = customer
                     amount = random.randint(1, 5)
                     newOrder.amount = amount
-                    
                     product = random.choice(stocks)
                     newOrder.stockID = product
-                    newOrder.cents = int(amount * product.cents * random.uniform(1.1, 1.5))
-                    
+                    newOrder.price = amount * product.price * random.randrange(125,150) / 100
                     newOrder.date = currentday + timedelta(hours=random.randint(0,23), minutes=random.randint(0,59), seconds=random.randint(0,59))
-                    
                     stockAmounts[product] = stockAmounts[product] - amount
-                    
                     newOrder.save()
 
 def populate(request, days):
