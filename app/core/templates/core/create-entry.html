@@ -23,7 +23,7 @@
 <div class = "login">  
   
     {% if messages %}  
-        <ul>   
+        <ul id="messageList">
             {% for message in messages %}
             <li><div class="alert {{ message.tags }}" role="alert">
                 {{message}}
@@ -39,14 +39,59 @@
              {% csrf_token %}  
              {{ form|crispy }}
              <div class="form-group">
-                <button type="submit" id="register_button" class="btn btn-outline-info">Register</button>
+                <button type="submit" id="register_button" class="btn btn-outline-info">{{formTitle}}</button>
             </div>  
         </form>
     {% else %}
-        <p>You can create new entries here.</p>
+        <p>From here, you can add new customers, suppliers, products, incoming orders and outgoing orders.</p>
     {% endif %}
-
-
      </div>  
+
+    {% if priceList %}
+        <div style="display: none;" id="priceList">{{priceList}}</div>
+        <script>
+            priceList = document.getElementById("priceList").innerHTML
+            priceList = JSON.parse(priceList)
+
+            function defaultPrice() {
+                stockID = document.getElementsByName("stockID")[0].value
+                price = priceList[stockID][0]
+
+                amount = document.getElementsByName("amount")[0].value
+                var priceField = document.getElementsByName("price")[0]
+                priceField.value = Math.ceil(price * amount*100)/100
+            }
+
+            function onChangeStock() {
+                stockID = document.getElementsByName("stockID")[0].value
+                document.getElementById("hint_id_amount").innerHTML = 'Current Amount is ' + priceList[stockID][1]
+                document.getElementById("hint_id_price").innerHTML = 'Per Unit Price is ' + priceList[stockID][0]
+                defaultPrice()
+            }
+
+            function onChangeAmount() {
+                stockID = document.getElementsByName("stockID")[0].value
+                if (document.getElementsByName("amount")[0].value > priceList[stockID][1]) {
+                    document.getElementsByName("amount")[0].value = priceList[stockID][1]
+                    document.getElementById("hint_id_amount").innerHTML = 'Please Limit to ' + priceList[stockID][1]
+                } else if (document.getElementsByName("amount")[0].value < 0) {
+                    document.getElementsByName("amount")[0].value = 0
+                    document.getElementById("hint_id_amount").innerHTML = 'Current Amount is ' + priceList[stockID][1] + ', Please Enter a Positive Integer'
+                } else {
+                    document.getElementById("hint_id_amount").innerHTML = 'Current Amount is ' + priceList[stockID][1]
+                }
+                defaultPrice()
+            }
+
+            function onChangePrice() {
+                if (document.getElementsByName("price")[0].value < 0) {
+                    defaultPrice()
+                    document.getElementById("hint_id_price").innerHTML = 'Price can not be negative, Per Unit Price is ' + priceList[stockID][0]
+                } else {
+                    document.getElementById("hint_id_price").innerHTML = 'Per Unit Price is ' + priceList[stockID][0]
+                }
+            }
+        </script>
+    {% endif %}
   
 {% endblock content %}
