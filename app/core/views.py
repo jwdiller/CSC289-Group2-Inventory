@@ -108,17 +108,25 @@ def ordersignup(request):
             entry.userId = request.user
             orderAmount = int(form.data.get('amount'))
             orderCost = decimal.Decimal(form.data.get('price'))
-            if (orderAmount < 0 or orderAmount > 1000):  # Acceptable range is 1 - 1000 'amount'
-                messages.error(request,('Amount can\'t be less than 0 or greater than 1,000, please try again!'))
-            else:
-                if (orderCost < 0 or orderCost > 1000000):  # Acceptable range is $0.01 - $10,000 dollars
-                    messages.error(request,('price can\'t be less than 0 or greater than 1,000,000 (10,000 dollars), please try again!'))
-                else:
-                    #form.save()
-                    entry.date = datetime.now()
-                    entry.save()
-                    messages.success(request,('Outgoing Order Added'))
-                    return redirect('home')
+            isValid = True
+            if (orderAmount < 0):  # Acceptable range is 1 - 1000 'amount'
+                messages.error(request,('Amount can not be less than 0, please try again!'))
+                isValid = False
+            elif (orderAmount > Stock.objects.values('amount').filter(id=entry.stockID.id)[0]['amount']):
+                isValid = False
+                messages.error(request,('Amount can not be greater than Current Stock, please try again!'))
+            elif (orderAmount > 1000): #Cannot be greater than 1000
+                messages.error(request,('Amount can not be greater than 1,000, please try again!'))
+                isValid = False
+            if (orderCost < 0 or orderCost > 1000000):  # Acceptable range is $0.01 - $10,000 dollars
+                messages.error(request,('price can\'t be less than 0 or greater than 1,000,000 (10,000 dollars), please try again!'))
+                isValid = False
+            if isValid:
+                #form.save()
+                entry.date = datetime.now()
+                entry.save()
+                messages.success(request,('Outgoing Order Added'))
+                return redirect('home')
     else:
         form = OrderForm()
     # formTitle is the Title for Tab, formHeader is human-readable on the page itself
@@ -134,17 +142,19 @@ def incomingsignup(request):
             entry.userId = request.user
             orderAmount = int(form.data.get('amount'))
             orderCost = decimal.Decimal(form.data.get('price'))
+            isValid = True
             if (orderAmount < 0 or orderAmount > 1000):  # Acceptable range is 1 - 1000 'amount'
                 messages.error(request,('Amount can\'t be less than 0 or greater than 1,000, please try again!'))
-            else:
-                if (orderCost < 0 or orderCost > 1000000):  # Acceptable range is $0.01 - $10,000 dollars
-                    messages.error(request,('price can\'t be less than 0 or greater than 1,000,000 (10,000 dollars), please try again!'))
-                else:
-                    #form.save()
-                    entry.date = datetime.now()
-                    entry.save()
-                    messages.success(request,('Incoming Order Added'))
-                    return redirect('home')
+                isValid = False
+            if (orderCost < 0 or orderCost > 1000000):  # Acceptable range is $0.01 - $10,000 dollars
+                messages.error(request,('price can\'t be less than 0 or greater than 1,000,000 (10,000 dollars), please try again!'))
+                isValid = False
+            if isValid:
+                #form.save()
+                entry.date = datetime.now()
+                entry.save()
+                messages.success(request,('Incoming Order Added'))
+                return redirect('home')
     else:
         form = IncomingForm()
     # formTitle is the Title for Tab, formHeader is human-readable on the page itself
