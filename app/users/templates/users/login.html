@@ -3,7 +3,8 @@
 {% block content %}  
 {% load crispy_forms_tags %}
 <div class = "login">  
-
+    <h1>Welcome Back!</h1>
+    <br>
     {% if messages %}
         <ul>
             {% for message in messages %}
@@ -17,6 +18,7 @@
             {{ form|crispy }}
             <button type="submit">Login</button>
         </form>
+        <br><br>
         </div>
     </div>
 </div>

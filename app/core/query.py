@@ -186,7 +186,7 @@ def alert_messages(request):
         #messages.warning(request, 'Test : ' + product['productName'] + ' stock is just fine.', extra_tags=tags[3])
     #for product in alert[3]:
         #messages.warning(product.productName ' stock running low.', extra_tags:'Low Priority')
-        
+     
 def priceList(request):
     raw_data = Stock.objects.values('id', 'price', 'amount')
     priceList = {}
