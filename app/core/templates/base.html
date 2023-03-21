@@ -5,7 +5,7 @@
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" href="{% static 'css/message.css' %}">
-	<link rel="stylesheet" href="{% static 'css/icecream.css' %}" id="css">
+	<link rel="stylesheet" href="{% static 'css/simple.css' %}" id="css">
 </head>
 <body>
 	<h1 id="title">Small Inventory Manager</h1>
@@ -31,7 +31,11 @@
 					{% endif %}
 					
 					<li class="nav-item"><a class="nav-link" href="{% url 'DB-home' %}">Databases</a></li>
-					<li class="nav-item"><a class="nav-link" href="{% url 'profit' month=3 id=1%}">Charts</a></li>
+					{% if singleProductID != -1 %}
+					<li class="nav-item"><a class="nav-link" href="{% url 'profit' month=3 id=singleProductID %}">Charts</a></li>
+					{% else %}
+					<li class="nav-item"><a class="nav-link disabled">Charts</a></li>
+					{% endif %}
 					<li class="nav-item"><a class="nav-link" href="{% url 'signup-home' %}">New Entries</a></li>
 					<li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
 					{% if user.is_authenticated %}
@@ -39,6 +43,9 @@
 					{% endif %}
 				</ul>
 		</div>
+		{% if user.is_authenticated %}
+			<span style="float:right;" id="welcomeUser">Welcome, {{user.username}}</span>
+		{% endif %}
 	</nav>
 </header>
 <main role="main" class="container">
@@ -62,7 +69,6 @@
 				<option value="{% static 'css/watches.css' %}">Watches</option>
 			</select>
 		</span>
-		</div>
 	</div>
 </div>
 	

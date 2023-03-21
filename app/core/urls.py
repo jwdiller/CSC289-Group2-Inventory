@@ -5,8 +5,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 # These represent the url locations for each page
 urlpatterns = [
+  path('', views.home, name='home'), #home page
 	path('about/', views.about, name='about'), #about us, experimental page
-	path('', views.home, name='home'), #home page
  
  	path('database/customer', views.customer, name='customerDB'), # Start of database URLS
   path('database/supplier', views.supplier, name='supplierDB'), # Add to
@@ -24,6 +24,7 @@ urlpatterns = [
   
   #populate for testing
   path('reseed', views.repop, name='repop'),
+  path('reseed/<int:days>', views.repop, name='minirepop'),
   path('populate/<int:days>', views.populate, name='populate'),
   
   #Custom Queries

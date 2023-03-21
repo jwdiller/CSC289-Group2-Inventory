@@ -8,6 +8,7 @@ from django.shortcuts import redirect
 from better_profanity import profanity
 from .fakepop import *
 from .query import *
+import decimal
 
 # Create your views here.
 
@@ -22,8 +23,7 @@ def home(request):
 # Generates random words and then calls the about.html page for display (using these words)
 # We most likely will change this later :/
 def about(request):
-    userIDs = User.objects.order_by('id')
-    return render(request, 'about.html', {'misc' : userIDs})
+    return render(request, 'about.html', {})
 
 # These will call the database.html file and send the responding database that will be shown for the user
 def customer(request):
@@ -54,7 +54,7 @@ def customersignup(request):
 	else:
 		form = CustomerForm()
 	# formTitle is the Title for Tab, formHeader is human-readable on the page itself
-	return render(request, 'core/create-entry.html', {'form': form, 'formTitle' : 'Create Customer', 'formHeader' : 'Register a Customer here'})
+	return render(request, 'core/create-entry.html', {'form': form, 'formTitle' : 'Create Customer', 'formHeader' : 'Register a Customer Here'})
 
 # This function confirms that the form for the 'Add Supplier' page has been fully filled out, validates the data, and then saves its contents
 def suppliersignup(request):
@@ -71,7 +71,7 @@ def suppliersignup(request):
 	else:
 		form = SupplierForm()
 	# formTitle is the Title for Tab, formHeader is human-readable on the page itself
-	return render(request, 'core/create-entry.html', {'form': form, 'formTitle' : 'Create Supplier', 'formHeader' : 'Register a Supplier here'})
+	return render(request, 'core/create-entry.html', {'form': form, 'formTitle' : 'Create Supplier', 'formHeader' : 'Register a Supplier Here'})
 
 # This function confirms that the form for the 'Stock New Product' page has been fully filled out, validates the data, and then saves its contents
 def stocksignup(request):
@@ -79,13 +79,13 @@ def stocksignup(request):
 		form = StockForm(request.POST)
 		if form.is_valid():
 			productName = form.data.get('productName')
-			productCost = int(form.data.get('cents'))
+			productCost = decimal.Decimal(form.data.get('price'))
 			productAmount = int(form.data.get('amount'))
 			if (profanity.contains_profanity(productName)):
 				messages.error(request,('Inappropriate/Invalid product name, please try again!'))
 			else:
 				if (productCost < 0 or productCost > 1000000): # Acceptable range is $0.00 - $10,000 dollars
-					messages.error(request,('Cents can\'t be less than 0 or greater than 1,000,000 (10,000 dollars), please try again!'))
+					messages.error(request,('price can\'t be less than 0 or greater than 1,000,000 (10,000 dollars), please try again!'))
 				else:
 					if (productAmount < 0 or productAmount > 1000):  # Acceptable range is 0 - 1000 'amount'
 						messages.error(request,('Amount can\'t be less than 0 or greater than 1,000, please try again!'))
@@ -96,7 +96,7 @@ def stocksignup(request):
 	else:
 		form = StockForm()
 	# formTitle is the Title for Tab, formHeader is human-readable on the page itself
-	return render(request, 'core/create-entry.html', {'form': form, 'formTitle' : 'Create Product Entry', 'formHeader' : 'Register a Product here'})
+	return render(request, 'core/create-entry.html', {'form': form, 'formTitle' : 'Create Product Entry', 'formHeader' : 'Register a Product Here'})
 
 # This function confirms that the form for the 'New Outgoing Order' page has been fully filled out, validates the data, and then saves its contents
 def ordersignup(request):
@@ -104,21 +104,25 @@ def ordersignup(request):
     if request.method == 'POST':
         form = OrderForm(request.POST)
         if form.is_valid():
+            entry = form.save(commit=False)
+            entry.userId = request.user
             orderAmount = int(form.data.get('amount'))
-            orderCost = int(form.data.get('cents'))
+            orderCost = decimal.Decimal(form.data.get('price'))
             if (orderAmount < 0 or orderAmount > 1000):  # Acceptable range is 1 - 1000 'amount'
                 messages.error(request,('Amount can\'t be less than 0 or greater than 1,000, please try again!'))
             else:
                 if (orderCost < 0 or orderCost > 1000000):  # Acceptable range is $0.01 - $10,000 dollars
-                    messages.error(request,('Cents can\'t be less than 0 or greater than 1,000,000 (10,000 dollars), please try again!'))
+                    messages.error(request,('price can\'t be less than 0 or greater than 1,000,000 (10,000 dollars), please try again!'))
                 else:
-                    form.save()
+                    #form.save()
+                    entry.date = datetime.now()
+                    entry.save()
                     messages.success(request,('Outgoing Order Added'))
                     return redirect('home')
     else:
         form = OrderForm()
     # formTitle is the Title for Tab, formHeader is human-readable on the page itself
-    return render(request, 'core/create-entry.html', {'form': form, 'formTitle' : 'Create Outgoing Order', 'formHeader' : 'Register an Outgoing Order here'})
+    return render(request, 'core/create-entry.html', {'form': form, 'formTitle' : 'Create Outgoing Order', 'formHeader' : 'Register an Outgoing Order Here', 'priceList' : priceList(request)})
 
 # This function confirms that the form for the 'New Incoming Order' page has been fully filled out, validates the data, and then saves its contents
 def incomingsignup(request):
@@ -126,18 +130,22 @@ def incomingsignup(request):
     if request.method == 'POST':
         form = IncomingForm(request.POST)
         if form.is_valid():
+            entry = form.save(commit=False)
+            entry.userId = request.user
             orderAmount = int(form.data.get('amount'))
-            orderCost = int(form.data.get('cents'))
+            orderCost = decimal.Decimal(form.data.get('price'))
             if (orderAmount < 0 or orderAmount > 1000):  # Acceptable range is 1 - 1000 'amount'
                 messages.error(request,('Amount can\'t be less than 0 or greater than 1,000, please try again!'))
             else:
                 if (orderCost < 0 or orderCost > 1000000):  # Acceptable range is $0.01 - $10,000 dollars
-                    messages.error(request,('Cents can\'t be less than 0 or greater than 1,000,000 (10,000 dollars), please try again!'))
+                    messages.error(request,('price can\'t be less than 0 or greater than 1,000,000 (10,000 dollars), please try again!'))
                 else:
-                    form.save()
+                    #form.save()
+                    entry.date = datetime.now()
+                    entry.save()
                     messages.success(request,('Incoming Order Added'))
                     return redirect('home')
     else:
         form = IncomingForm()
     # formTitle is the Title for Tab, formHeader is human-readable on the page itself
-    return render(request, 'core/create-entry.html', {'form': form, 'formTitle' : 'Create Incoming Order', 'formHeader' : 'Register an Incoming Order here'})
+    return render(request, 'core/create-entry.html', {'form': form, 'formTitle' : 'Create Incoming Order', 'formHeader' : 'Register an Incoming Order Here', 'priceList' : priceList(request)})

@@ -5,8 +5,8 @@ from datetime import *
 from dateutil.relativedelta import relativedelta 
 from django.db.models import Sum, F, Count
 from django.contrib.auth.models import User
-
 from django.contrib import messages
+import json
 
 def getProducts():
     return Stock.objects.values('id', 'productName')
@@ -15,8 +15,8 @@ def getOrders(month, id):
     return Orders.objects.filter(date__gte=datetime.now() - relativedelta(months = month)).filter(stockID=id).order_by('date')
 
 def getTransactions(month, id):
-    order =  Orders.objects.annotate(trueCents=F('cents')).only('date', 'cents').filter(date__gte=datetime.now() - relativedelta(months = month)).filter(stockID=id)
-    incom = Incoming.objects.annotate(trueCents=F('cents') * -1).only('date', 'cents').filter(date__gte=datetime.now() - relativedelta(months = month)).filter(stockID=id)
+    order =  Orders.objects.annotate(trueprice=F('price')).only('date', 'price').filter(date__gte=datetime.now() - relativedelta(months = month)).filter(stockID=id)
+    incom = Incoming.objects.annotate(trueprice=F('price') * -1).only('date', 'price').filter(date__gte=datetime.now() - relativedelta(months = month)).filter(stockID=id)
     return order.union(incom).order_by('date')
 
 
@@ -52,8 +52,8 @@ def numbersold(request, month, id):
     amount_over_time.append({'t' : formatDate(datetime.now()), 'y' : currentAmount})
     
     product = Stock.objects.only('productName').filter(id = id)[0]
-           
-    return render(request, 'chart.html', {'title' : title, 'data' : amount_over_time, 'currentMonth' : month, 'currentID' : id, 'products' : products, 'amt' : currentAmount, 'chartlabel' : 'Amount Sold', 'product' : product})
+    params = {'title' : title, 'data' : amount_over_time, 'currentMonth' : month, 'currentID' : id, 'products' : products, 'amt' : currentAmount, 'chartlabel' : 'Amount Sold', 'product' : product, 'currentFunc' : 'numsold', 'monthSlice' : [3, 12, 60]}
+    return render(request, 'chart.html', params)
 
 def profit(request, month, id):
     raw_data = getTransactions(month, id)
@@ -62,7 +62,7 @@ def profit(request, month, id):
     amount_over_time = [{'t' : formatDate(datetime.now() - relativedelta(months = month)), 'y' : 0}]
     currentProfit = 0
     for order in raw_data:
-        currentProfit = currentProfit + float("{:.2f}".format(order.trueCents/100))
+        currentProfit = currentProfit + order.trueprice
         amount_over_time.append({ 't' : formatDate(order.date), 'y' : currentProfit})
     
     amount_over_time.append({'t' : formatDate(datetime.now()), 'y' : currentProfit})
@@ -70,7 +70,8 @@ def profit(request, month, id):
     product = Stock.objects.only('productName').filter(id = id)[0]
     
     currentProfit = "{:.2f}".format(currentProfit)
-    return render(request, 'chart.html', {'title' : title, 'data' : amount_over_time, 'currentMonth' : month, 'currentID' : id, 'products' : products, 'profit' : currentProfit, 'chartlabel' : 'Profits', 'product' : product})
+    params = {'title' : title, 'data' : amount_over_time, 'currentMonth' : month, 'currentID' : id, 'products' : products, 'profit' : currentProfit, 'chartlabel' : 'Profits', 'product' : product, 'currentFunc' : 'profit', 'monthSlice' : [3, 12, 60]}
+    return render(request, 'chart.html', params)
 
 def profit2(request, month, ids=[1,2,3,4,5]):
     products = getProducts
@@ -84,7 +85,7 @@ def profit2(request, month, ids=[1,2,3,4,5]):
         amount_over_time = [{'t' : formatDate(datetime.now() - relativedelta(months = month)), 'y' : 0}]
         currentProfit = 0
         for order in raw_data:
-            currentProfit = currentProfit + float("{:.2f}".format(order.cents/100))
+            currentProfit = currentProfit + order.price
             amount_over_time.append({ 't' : formatDate(order.date), 'y' : currentProfit})
         amount_over_time.append({'t' : formatDate(datetime.now()), 'y' : currentProfit})
         set = {}
@@ -157,6 +158,7 @@ def inventoryAlerts():
     for product in products:
         print ('Product Amount of id #', product['id'],'is : ', product['amount'])
         print ('Total orders last week were : ', orders[product['id']])
+        print ('To make a medium priorty, do above', orders[product['id']] )
         if product['amount'] <= 0: # If the product is zero, or less than (through improper data use)
             alertLists[0].append(product) # If Zero
         elif product['amount'] < orders[product['id']]: # If it the product will run out this week, naive version
@@ -184,3 +186,10 @@ def alert_messages(request):
         #messages.warning(request, 'Test : ' + product['productName'] + ' stock is just fine.', extra_tags=tags[3])
     #for product in alert[3]:
         #messages.warning(product.productName ' stock running low.', extra_tags:'Low Priority')
+     
+def priceList(request):
+    raw_data = Stock.objects.values('id', 'price', 'amount')
+    priceList = {}
+    for entry in raw_data:
+        priceList[entry['id']] = [float(entry['price']), entry['amount']]
+    return json.dumps(priceList)
