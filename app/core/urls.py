@@ -38,9 +38,6 @@ urlpatterns = [
   #profile
   path('profile/', profile , name='profile'),
   #password reset
-  path('password-reset/', auth_views.PasswordResetView.as_view(template_name='password_reset.html'), name='password_reset'),
-  path('password-reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='password_reset_done.html'), name='password_reset_done'),
-  path('password-reset-confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='password_reset_confirm.html'), name='password_reset_confirm'),
-  path('password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(template_name='password_reset_complete.html'), name='password_reset_complete'), 
+  path('password/', auth_views.PasswordChangeView.as_view(), name='password_reset'),
 #path('top_5_stocks/', views.top_5_stocks, name='top_5_stocks'), # Top 5 Stocks (Query)
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
