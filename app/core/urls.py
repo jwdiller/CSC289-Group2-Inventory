@@ -38,6 +38,6 @@ urlpatterns = [
   #profile
   path('profile/', profile , name='profile'),
   #password reset
-  path('password/', auth_views.PasswordChangeView.as_view(), name='password_reset'),
+  path('password/', auth_views.PasswordChangeView.as_view(), name='password_reset2'),
 #path('top_5_stocks/', views.top_5_stocks, name='top_5_stocks'), # Top 5 Stocks (Query)
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
