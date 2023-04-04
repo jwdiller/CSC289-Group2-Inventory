@@ -12,7 +12,7 @@ const menuPage = document.getElementById("menuPage");
 const totalPart = document.getElementById("totalPart");
 const debugDiv = document.getElementById("debug");
 
-const taxPercent = .07; //Needs an upgrade, stat!
+const taxPercent = .0725; //Needs an upgrade, stat!
 
 function displayStart() {
     var looper = 0;
@@ -164,6 +164,7 @@ function calculateTotals() {
     document.getElementById("subTotal").innerHTML = subTotal;
     document.getElementById("tax").innerHTML = Taxes;
     document.getElementById("total").innerHTML = Total;
+    calculateChange();
 }
 
 function calculateChange() {
@@ -171,5 +172,9 @@ function calculateChange() {
     if (cash.value < 0) {
         cash.value = cash.value * -1;
     }
-    document.getElementById("change").innerHTML = parseFloat(parseFloat(cash.value) - parseFloat(Total)).toFixed(2);
+    try {
+        document.getElementById("change").innerHTML = parseFloat(parseFloat(cash.value) - parseFloat(Total)).toFixed(2);
+    } catch {
+        document.getElementById("change").innerHTML = "-----";
+    }
 }
