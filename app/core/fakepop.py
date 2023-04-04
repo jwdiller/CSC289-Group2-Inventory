@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from django.shortcuts import render
 from django.contrib import messages
 from django.contrib.auth.models import User
+from decimal import Decimal
 
 #name, email, phoneNumber, note
 entitySQL = '''
@@ -105,7 +106,7 @@ def fakeInOutModel():
             newIn.note = ''
             newIn.price = amount * (.75) * Stock.objects.values('price').filter(id=newOrder.stockID)[0]
             newIn.save()
-            
+                        
 def fakeInOut2(days):
     numdays = days # 2000 for five years
     today = datetime.now()
@@ -150,10 +151,17 @@ def fakeInOut2(days):
                     newOrder.amount = amount
                     product = random.choice(stocks)
                     newOrder.stockID = product
-                    newOrder.price = amount * product.price * random.randrange(125,150) / 100
-                    newOrder.date = currentday + timedelta(hours=random.randint(0,23), minutes=random.randint(0,59), seconds=random.randint(0,59))
+                    price = amount * product.price * random.randrange(125,150) / 100
+                    newOrder.price = price
+                    rightNow = currentday + timedelta(hours=random.randint(0,23), minutes=random.randint(0,59), seconds=random.randint(0,59))
+                    newOrder.date = rightNow
                     stockAmounts[product] = stockAmounts[product] - amount
                     newOrder.save()
+                    newTax = salesTax()
+                    newTax.tax = price * Decimal(.07) # CHANGE THIS IN THE FUTURE
+                    newTax.date = rightNow
+                    newTax.save()
+                    
 
 def populate(request, days):
     fakeInOut2(days)
@@ -166,6 +174,7 @@ def repop(request, days=2000):
     Stock.objects.all().delete()
     Orders.objects.all().delete()
     Incoming.objects.all().delete()
+    salesTax.objects.all().delete()
     random.seed(0)
     fakeCustomerModel()
     fakeSupplierModel()
