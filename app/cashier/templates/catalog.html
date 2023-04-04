@@ -1,0 +1,43 @@
+{% extends 'microBase.html' %}
+{% load static %}
+
+{% block title %}
+Catalog View
+{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/cashier.css' %}" id="css">
+    <script src="{% static 'scripts/OrderCatalog.js' %}" defer></script>
+    {{list|json_script}}
+{% endblock %}
+
+{% block content %}
+    <body onload="displayStart()">
+    {% if messages %}
+	    <ul id="messageList">
+	    {% for message in messages %}
+    		<li><div class="alert {{ message.tags }}" role="alert">
+                {{message}}
+            </div></li>
+	    {% endfor %}
+	    </ul>
+    {% endif %}
+        <form action="catalogHandler" method="POST">
+        {% csrf_token %}
+        <div id="debug"></div>
+        <div id="customeriden"><label for="customerPhone">Customer Phone # : </label><input type="number" id="customerPhone" name="customerPhone" placeholder="(###)-###-####"></input></div>
+        <div id="buttonDiv"></div>
+        <div id="menuPage"></div>
+        <div id="totalPart">
+            <ul>
+                <li>subTotal : <span id="subTotal">-----</span></li>
+                <li>Tax : <span id="tax">-----</span></li>
+                <li>Total : <span id="total">-----</span></li>
+                <li>Cash : <input type="number" id="cash" oninput="calculateChange()"></input></li>
+                <li>Change : <span id="change">-----</span></li>
+                <li><button id="submit" type="submit">Submit</button></li>
+            </ul>
+        </div>
+        </form>
+    </body>
+{% endblock %}
