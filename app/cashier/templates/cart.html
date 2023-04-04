@@ -1,0 +1,67 @@
+<!-- Template for the Cash Till/Register Portion -->
+{% load static %}
+<!doctype html>
+<html>
+<head>
+    <title>Register</title>
+    <link rel="stylesheet" href="{% static 'css/cashier.css' %}" id="css">
+</head>
+<body onload="addJob()">
+    <div class="top_bar" id="top_bar"> <!-- Static Top Bar -->
+        <span>REGISTER</span>
+        <span class="username" id="username">LASTNAME, FIRSTNAME signed in</span>
+        <span class="logout" id="logout">LOG OUT</span>
+    </div>
+    <div class="item_ringup" id="item_ringup"> <!-- Fits multiple items, may require scrolling -->
+        <div class="product_entry" id="1_product">
+
+            <div class="first_bar" id="1_fb">
+                <span class="supplier_choice" id="1_sc">
+                    <select>
+                        <option>Dummy Option</option>
+                    </select>
+                </span>
+                <span class="product_choice" id="2_pc">
+                    <select>
+                        <option>123456789 Dummy Product</option>
+                    </select>
+                </span>
+            </div>
+
+            <div class="second_bar" id="1_sb">
+                <span class="product_price" id="1_pp">
+                    11.75
+                </span>
+                <span class="product_amount" id="1_pa">
+                    x <input type="integer" value=5></input>
+                </span>
+                <span class="product_miniTotal" id="1_mt">
+                    58.75 <!-- 1_pp * 1_pa -->
+                </span>
+            </div>
+
+            <div class="third_bar" id="1_tb">
+                <span class="product_discount" id="1_pd">
+                    Discount : <input type="decimalField" value="3.00"></input>
+                </span>
+                <span class="product_trueTotal" id="1_tt">
+                    55.75
+                </span>
+            </div>
+        </div>
+
+    </div>
+    <div class="addItem" id="addItem">
+        <button>Add Item</button>
+    </div>
+    <div class="bottom_portion" id="bottom"> <!-- Stuff on the bottom -->
+        <div class="subTotal" id="subTotal">Subtotal : <span>55.75</span></div>
+        <div class="tax" id="tax">Tax : <span>3.91</span></div> <!-- SubTotal * current TaxEntity.taxRate-->
+        <div class="total" id="total">Total : <span>59.66</span></div>
+        <div class="cash" id="cash"><input value="60.00"></type></div>
+        <div class="change" id="change">0.34</div> <!-- cash - total -->
+        <div class="submit_cart" id="submit_cart"><button>Submit Cart</button></div>
+    </div>
+    <script src="{% static 'scripts/cashregister.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+{% load static %}
+<!doctype html>
+<head>
+    <title>Cashier - {% block title %}Generic Page{% endblock %}</title>
+    	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" href="{% static 'css/message.css' %}">
+	<link rel="stylesheet" href="{% static 'css/simple.css' %}" id="css">
+    <script src="{% static 'scripts/littleClock.js' %}"></script>
+    {% block head %}
+    {% endblock %}
+</head>
+<div id="topBar">
+    <ul id="topBarList" style="display: flex; flex-flow: row; justify-content: space-around; padding: 5px;">
+        <li>{{user.username}} signed in</li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Log Out</a></li>
+        <li id="timeDisplay" onload="DisplayClock()">Time Here</li>
+    </ul>
+</div>
+{% block content %}
+{% endblock %}
+<script src="{% static 'scripts/littleClock.js' %}"></script>
+</html>

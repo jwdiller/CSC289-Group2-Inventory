@@ -1,0 +1,44 @@
+body {
+    font-size: large;
+    width : 50%;
+    justify-content: center;
+}
+
+.top_bar {
+    background-color: aqua;
+}
+
+.bottom_portion {
+    float : right;
+}
+
+.item_ringup {
+}
+
+.product_entry {
+
+}
+
+.first_bar {
+    background-color: lightgray;
+}
+
+.second_bar {
+    background-color: white;
+}
+
+.third_bar {
+    background-color: lightgrey;
+}
+
+.evenProduct {
+    background-color: white;
+}
+
+.oddProduct {
+    background-color: lightgrey;
+}
+
+.buttonDiv {
+    background-color: lightslategray;
+}
