@@ -62,7 +62,7 @@ def catalogHandler(request):
                 newOrder.save()
         newTax = salesTax()
         newTax.date = rightNow
-        newTax.tax = subTotal * Decimal(.07) # Should change this in the future
+        newTax.tax = subTotal * Decimal(.0725) # Should change this in the future
         #print(newTax)
         newTax.save()
         messages.success(request, "Cart Successful")
