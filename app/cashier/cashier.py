@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.contrib import messages
 from .query import *
 from decimal import Decimal
+import json
 
 def catalogHandler(request):
     list = getSuppliersAndProducts()
@@ -44,6 +45,7 @@ def catalogHandler(request):
             customerID = None
         print("customer is ", customerID)
         subTotal = 0
+        receiptDict = {'rightNow' : rightNow.strftime("%A %B %d, %Y %X %Z"), 'products' : [],}
         for product in amountDictionary:
             if amountDictionary[product] and amountDictionary[product] > 0:
                 newOrder = Orders()
@@ -59,13 +61,28 @@ def catalogHandler(request):
                 newOrder.shortnote = ''
                 newOrder.note = ''
                 #print(newOrder)
+                receiptDict['products'].append({'name' : Stock.objects.values("productName").filter(id=int(product[7:]))[0]['productName'][:25],'amount' : amountDictionary[product], 'price' : ourPrice, 'discount' : discountDictionary["discount" + product[6:]], 'total' : miniTotal})
                 newOrder.save()
         newTax = salesTax()
         newTax.date = rightNow
         newTax.tax = subTotal * Decimal(.0725) # Should change this in the future
+        receiptDict['subTotal'] = subTotal
+        receiptDict['tax'] = newTax.tax
+        receiptDict['total'] = subTotal + receiptDict['tax']
         #print(newTax)
         newTax.save()
         messages.success(request, "Cart Successful")
-        return render(request, 'cashierScreen.html', {})
+        return render(request, 'cashierScreen.html', {'receiptDict' : receiptDict})
     messages.error(request, "Error in Processing Cart, starting over.")
     return render(request, 'catalog.html', {'list':list,})
+
+def testReceipt(request):
+    testDict = {'rightNow' : datetime.now().strftime("%A %B %d, %Y %X %Z"), 'products' : []}
+    
+    testDict['products'].append({'name' : 'Questionable Life Choices', 'amount' : 5, 'price' : 1.55, 'discount' : 2, 'total' : 5.75})
+    testDict['products'].append({'name' : 'Chuuni Daydreams', 'amount' : 10, 'price' : 0.50, 'discount' : 0, 'total' : 5.00})
+    testDict['subTotal'] = 10.75
+    testDict['tax'] = .78
+    testDict['total'] = 11.53
+    
+    return render(request, 'cashierScreen.html', {'receiptDict' : json.dumps(testDict)}) 
