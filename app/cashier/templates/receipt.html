@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<!-- Receipt Template. Later improvements may allow for better customization. -->
+<html>
+    <head>
+        <title>Receipt</title>
+        <link rel="stylesheet" href="{% static 'css/receipt.css' %}">
+    </head>
+    <body>
+        <div class="numbers" id="numbers">{{rightNow}}</div>
+        <div class="header" id="header">
+            Welcome to Our Shop
+        </div>
+        <div class="items" id="items">
+            {% for product in products %}
+                <span class="productName">{{product.productName}}</span>
+                <span class="unitPrice">{{product.unitprice}}</span> x <span class="product.amount">
+                <span class="discountSpan">- {{product.discount}}</span> = <span class="product.productTotal"></span>
+                <br/>
+            {% endfor %}
+        </div>
+        <div class="math" id="math">
+            subTotal : <span class="subTotal"></span><br/>
+            Tax : <span class="taxes"></span><br/>
+            Total : <span class="total"></span><br/>
+        </div>
+        <div class="footer" id="footer">
+            Thank you for shopping with us!
+        </div>
+    </body>
+</html>

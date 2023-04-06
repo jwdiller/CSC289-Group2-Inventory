@@ -10,7 +10,7 @@
     {% block head %}
     {% endblock %}
 </head>
-<div id="topBar">
+<div class="topBar" id="topBar">
     <ul id="topBarList" style="display: flex; flex-flow: row; justify-content: space-around; padding: 5px;">
         <li>{{user.username}} signed in</li>
         <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Log Out</a></li>
