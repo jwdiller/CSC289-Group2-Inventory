@@ -24,19 +24,19 @@ Catalog View
     {% endif %}
         <form action="catalogHandler" method="POST">
         {% csrf_token %}
-        <div id="debug"></div>
-        <div id="customeriden"><label for="customerPhone">Customer Phone # : </label><input type="number" id="customerPhone" name="customerPhone" placeholder="(###)-###-####"></input></div>
+        <div id="debug" style="display : none;" hidden></div>
+        <div id="customeriden"><label for="customerPhone">Customer Phone #</label><input type="number" id="customerPhone" name="customerPhone" placeholder="(###)-###-####"></input></div>
         <div id="buttonDiv"></div>
         <div id="menuPage"></div>
         <div id="totalPart">
-            <ul>
-                <li>subTotal : <span id="subTotal">-----</span></li>
-                <li>Tax : <span id="tax">-----</span></li>
-                <li>Total : <span id="total">-----</span></li>
-                <li>Cash : <input type="number" id="cash" oninput="calculateChange()"></input></li>
-                <li>Change : <span id="change">-----</span></li>
-                <li><button id="submit" type="submit">Submit</button></li>
-            </ul>
+            <table>
+                <tr><td>subTotal</td><td id="subTotal">-----</td></tr>
+                <tr><td>Tax</td><td id="tax">-----</td></tr>
+                <tr><td>Total</td><td id="total">-----</td></tr>
+                <tr><td>Cash</td><td><input type="number" id="cash" oninput="calculateChange()" size=4></td></tr>
+                <tr><td>Change</td><td id="change">-----</td></tr>
+                <tr><td colspan=2 style="text-align:center;"><button id="submit" type="submit" disabled>Submit</button></td></tr>
+            </table>
         </div>
         </form>
     </body>

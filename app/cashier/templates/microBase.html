@@ -10,11 +10,11 @@
     {% block head %}
     {% endblock %}
 </head>
-<div class="topBar" id="topBar">
-    <ul id="topBarList" style="display: flex; flex-flow: row; justify-content: space-around; padding: 5px;">
-        <li>{{user.username}} signed in</li>
+<div class="topBar navbar navbar-light navbar-expand-lg" id="topBar">
+    <ul id="topBarList" class="navbar-nav mr-auto">
+        <li class="nav-item"><span class="nav-link">{{user.username}} signed in</span></li>
         <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Log Out</a></li>
-        <li id="timeDisplay" onload="DisplayClock()">Time Here</li>
+        <li id="timeDisplay" onload="DisplayClock()" class="nav-item navbar-right" style="margin-left:500px;">Time Here</li>
     </ul>
 </div>
 {% block content %}
