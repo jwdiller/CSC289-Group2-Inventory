@@ -12,7 +12,7 @@ const menuPage = document.getElementById("menuPage");
 const totalPart = document.getElementById("totalPart");
 const debugDiv = document.getElementById("debug");
 
-const taxPercent = .07; //Needs an upgrade, stat!
+const taxPercent = .0725; //Needs an upgrade, stat!
 
 function displayStart() {
     var looper = 0;
@@ -20,6 +20,7 @@ function displayStart() {
         var newButton = document.createElement("button");
         newButton.innerHTML = list[key]['supplierName'];
         newButton.setAttribute("type", "button");
+        newButton.setAttribute("class", "btn btn-primary");
         newButton.setAttribute("onclick", "displayTab(" + looper++ + ")");
         supplierButtons.push(newButton);
         buttonDiv.appendChild(newButton);
@@ -38,12 +39,13 @@ function createList(catalog) {
         var newTab = document.createElement("div");
         newTab.setAttribute("id", "list" + looper++);
         if (looper % 2 == 0) {
-            newTab.setAttribute("class", "evenProduct");
+            newTab.setAttribute("class", "productLine evenProduct");
         } else {
-            newTab.setAttribute("class", "oddProduct");
+            newTab.setAttribute("class", "productLine oddProduct");
         }
         productTabs[productTabs.length - 1].appendChild(newTab);
-        newTab.appendChild(createEntry(catalog[key]));
+        //newTab.appendChild(createEntry(catalog[key]));
+        newTab.innerHTML = createEntry2(catalog[key]);
     }
 }
 
@@ -77,31 +79,42 @@ function createEntry(product) {
 
     productLine.push(document.createElement("span"));
     productLine[++elementIndex].innerHTML = product['productName'];
+    productLine[elementIndex].setAttribute("class", "productName");
 
     productLine.push(document.createElement("label"));
     productLine[++elementIndex].innerHTML = "Price";
+    //productLine[elementIndex].setAttribute("class", "col");
     productLine.push(document.createElement("span"));
     productLine[++elementIndex].innerHTML = product['price'];
+    //productLine[elementIndex].setAttribute("class", "col");
 
     productLine.push(document.createElement("label"));
     productLine[++elementIndex].setAttribute("for", "amountField");
+    //productLine[elementIndex].setAttribute("class", "col");
     productLine[elementIndex].innerHTML = "Amount";
     productLine.push(document.createElement("input"));
     productLine[++elementIndex].setAttribute("type", "number");
     productLine[elementIndex].setAttribute("id", "amount-" + product['id']);
+    productLine[elementIndex].setAttribute("size", 6);
+    productLine[elementIndex].setAttribute("class", "amountField");
     productLine[elementIndex].setAttribute("name", "amount-" + product['id']);
     productLine[elementIndex].setAttribute("oninput", "onChangeAmount(" + product['id'] + ")");
     //productLine[elementIndex].setAttribute("onchange", "onChangeAmount(" + product['id'] + ")");
     productLine[elementIndex].setAttribute("placeholder", product['amount'] + " in stock");
+    productLine[elementIndex].setAttribute("aria-label", ".form-control-sm");
 
     productLine.push(document.createElement("label"));
     productLine[++elementIndex].setAttribute("for", "discountField");
+    //productLine[elementIndex].setAttribute("class", "col");
     productLine[elementIndex].innerHTML = "Discount";
     productLine.push(document.createElement("input"));
     productLine[++elementIndex].setAttribute("type", "number");
     productLine[elementIndex].setAttribute("id", "discount-" + product['id']);
     productLine[elementIndex].setAttribute("name", "discount-" + product['id']);
+    productLine[elementIndex].setAttribute("class", "discount");
+    productLine[elementIndex].setAttribute("size", 7);
     productLine[elementIndex].setAttribute("pattern", "^\d*(\.\d{0,2})?$");
+    productLine[elementIndex].setAttribute("aria-label", ".form-control-sm");
     productLine[elementIndex].setAttribute("oninput", "onChangeDiscount(" + product['id'] + ")");
     //productLine[elementIndex].setAttribute("onchange", "onChangeDiscount(" + product['id'] + ")");
     productLine[elementIndex].setAttribute("step", ".01");
@@ -109,7 +122,9 @@ function createEntry(product) {
 
     productLine.push(document.createElement("span"));
     productLine[++elementIndex].innerHTML = "-----";
+    //productLine[elementIndex].setAttribute("class", "col");
     productLine[elementIndex].setAttribute("id", "sub-" + product['id']);
+    productLine[elementIndex].setAttribute("class", "productTotal");
 
     for (let looper=1; looper<productLine.length; looper++) {
         productLine[0].appendChild(productLine[looper]);
@@ -147,7 +162,8 @@ function onChangeDiscount(productID) {
 
 function calculateProductLineTotal(productID) {
     lineTotal = parseFloat((productAmounts[productID] * productPrices[productID]) - productDiscounts[productID]).toFixed(2);
-    document.getElementById("sub-" + productID).innerHTML = lineTotal;
+    //document.getElementById("sub-" + productID).innerHTML = lineTotal;
+    document.getElementById("sub-" + productID).value = lineTotal;
     productTotals[productID] = lineTotal;
     calculateTotals();
 }
@@ -164,6 +180,7 @@ function calculateTotals() {
     document.getElementById("subTotal").innerHTML = subTotal;
     document.getElementById("tax").innerHTML = Taxes;
     document.getElementById("total").innerHTML = Total;
+    calculateChange();
 }
 
 function calculateChange() {
@@ -171,5 +188,41 @@ function calculateChange() {
     if (cash.value < 0) {
         cash.value = cash.value * -1;
     }
-    document.getElementById("change").innerHTML = parseFloat(parseFloat(cash.value) - parseFloat(Total)).toFixed(2);
+    try {
+        var theChange = parseFloat(parseFloat(cash.value) - parseFloat(Total)).toFixed(2);
+        document.getElementById("change").innerHTML = theChange;
+        if (theChange < 0 || isNaN(theChange))
+            document.getElementById("submit").disabled=true;
+        else
+            document.getElementById("submit").disabled=false;
+    } catch {
+        document.getElementById("change").innerHTML = "-----";
+        document.getElementById("submit").disabled=true;
+    }
+}
+
+function createEntry2(product) {
+    var output="<span class=\"productName\">" + product['productName'] + "</span>";
+    output += "<span class=\"priceSpan\"><label for=\"price\">Price</label>";
+    output += "<input type readonly disabled class=\"price\" value=\"" + product['price'] + "\" size=3></input></span>";
+
+    output += "<span class=\"amountSpan\"><label for=\"amountField\">Amount</label><input type=\"number\" id=\"";
+    output += "amount-" + product['id'] + "\" size=3 class=\"amountField\" name=\"amount-" + product['id'] + "\" ";
+    output += "oninput=\"onChangeAmount(" + product['id'] + ")\"></span>";
+
+    output += "<span class=\"discountSpan\"><label for=\"discountField\">Discount</label>";
+    output += "<input type=\"number\" ";
+    output += "id=\"discount-" + product['id'] + "\"";
+    output += " name=\"discount-" + product['id'] + "\"";
+    output += " class=\"discountField\"";
+    output += "size=4 pattern=\"^\d*(\.\d{0,2})?$\"";
+    output += " oninput=\"onChangeDiscount(" + product['id'] + ")\"";
+    output += " step=.01 value=0></input></span>";
+
+    output += "<input type readonly disabled class=\"productTotal\" id=\"sub-" + product['id'] + "\" size=4></input>";
+
+    productPrices[product['id']] = product['price'];
+    productDiscounts[product['id']] = 0;
+
+    return output;
 }
