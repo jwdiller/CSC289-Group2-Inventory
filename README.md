@@ -46,7 +46,7 @@ pip install -r requirements.txt
 ## Configuration
 ### Setting up MySql database
 -   Start MySql server
--   Create database: "wakeicecream"
+-   Create database: "wakeIceCream"
 -   Create a database user with username and password
 ### Setting up environment variables
 -   Create environment variables for MySql database:

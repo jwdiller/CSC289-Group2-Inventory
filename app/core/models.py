@@ -86,3 +86,34 @@ class Incoming(models.Model):
         stock = Stock.objects.get(id=self.stockID.id)
         stock.amount += self.amount
         stock.save()
+
+# Database of who we are going to pay taxes to
+
+class salesTax(models.Model):
+    tax = models.DecimalField(decimal_places=2, max_digits=6)
+    date = models.DateTimeField(verbose_name="Date and Time")
+    
+    def __str__(self):
+        return str(self.date) + " $" + str(self.tax)
+
+"""
+class TaxEntity(models.Model):
+    taxPercent = models.DecimalField(decimal_places = 4, max_digits=10) # Assume every item has the same % for now
+    address = models.CharField(max_length=200, verbose_name="Address")
+    email = models.EmailField(max_length=200, verbose_name='E-Mail')
+    phoneNumber = models.CharField(max_length=50, verbose_name="Phone Number")
+    note = models.CharField(max_length=200, verbose_name='Note', blank=True,)
+        
+# CART creates outgoing carts, which are groups of outgoing Orders with with the same customer and time stamps.
+class Cart(models.Model):
+    userId = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, verbose_name="Authorizer ID")
+    customerId = models.ForeignKey(Customers, on_delete=models.SET_NULL, null=True, verbose_name="Customer ID")
+    date = models.DateTimeField(verbose_name="Date and Time")
+    
+    shortnote = models.CharField(max_length=20, verbose_name="Short Note", blank=True,)
+    note = models.CharField(max_length=200, verbose_name="Note", blank=True,) # May be needed
+    
+    subTotal = models.JSONField() #StockID, amount, price
+    tax = models.DecimalField(decimal_places=2, max_digits=6) # Should be a % from TaxEntity
+    taxEntityID = models.ForeignKey(TaxEntity, on_delete=models.SET_NULL, null=True, verbose_name="Paying Taxes To: ") # If a mobile business, can cross county lines
+    """
