@@ -1,34 +1,12 @@
-body {
-    font-size: large;
-    width : 50%;
-    justify-content: center;
+.productLine {
+    width:100%;
+    display : flex;
+    justify-content: space-around;
 }
 
-.top_bar {
-    background-color: aqua;
-}
-
-.bottom_portion {
-    float : right;
-}
-
-.item_ringup {
-}
-
-.product_entry {
-
-}
-
-.first_bar {
-    background-color: lightgray;
-}
-
-.second_bar {
-    background-color: white;
-}
-
-.third_bar {
-    background-color: lightgrey;
+.productName {
+    width:50%;
+    margin-left:15%;
 }
 
 .evenProduct {
@@ -39,6 +17,30 @@ body {
     background-color: lightgrey;
 }
 
-.buttonDiv {
-    background-color: lightslategray;
+.amountField {
+    width:5em;
+}
+
+.discountField {
+    width:7.5em;
+}
+
+label {
+    box-shadow : 1.5px 1.5px 1.5px;
+    margin:10px;
+    padding:5px;
+}
+
+.mathy {
+    float:right;
+}
+
+#totalPart {
+    margin-left:80%;
+    font-family: monospace, monospace;
+    list-style: none;
+}
+
+#cash {
+    width:5em;
 }
