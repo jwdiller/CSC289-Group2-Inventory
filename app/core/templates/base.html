@@ -29,25 +29,33 @@
 					{% if user.is_authenticated == False %}
 					<li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Sign Up</a></li>
 					{% endif %}
-					
-					<li class="nav-item"><a class="nav-link" href="{% url 'DB-home' %}">Databases</a></li>
-					{% if singleProductID != -1 %}
-					<li class="nav-item"><a class="nav-link" href="{% url 'profit' month=3 id=singleProductID %}">Charts</a></li>
-					{% else %}
-					<li class="nav-item"><a class="nav-link disabled">Charts</a></li>
+					{% if user.is_authenticated == True %}
+						<li class="nav-item"><a class="nav-link" href="{% url 'DB-home' %}">Databases</a></li>
+						{% if singleProductID != -1 %}
+							<li class="nav-item"><a class="nav-link" href="{% url 'profit' month=3 id=singleProductID %}">Charts</a></li>
+						{% else %}
+							<li class="nav-item"><a class="nav-link disabled">Charts</a></li>
+						{% endif %}
+						<li class="nav-item"><a class="nav-link" href="{% url 'signup-home' %}">New Entries</a></li>
+						<li class="nav-item"><a class="nav-link" href="{% url 'catalog' %}">Cashier</a></li>
 					{% endif %}
-					<li class="nav-item"><a class="nav-link" href="{% url 'signup-home' %}">New Entries</a></li>
-					<li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
 					{% if user.is_authenticated %}
-						<li><a class="nav-item nav-link" href="{% url 'profile'%}">Profile</a></li>
-						<li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Log Out</a></li>
-						<li class="nav-item"><a class="nav-link" href="{% url 'password_reset2' %}">Change Password</a></li>
+						<li>
+						<div class="dropdown">
+								<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									{{user.username}}
+								</button>
+							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						  		<a class="dropdown-item" href="{% url 'profile'%}">Profile</a>
+						  		<a class="dropdown-item" href="{% url 'password_reset2' %}">Change Password</a>
+						  		<a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+							</div>
+					  	</div>
+						</li>
 					{% endif %}
+					<li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
 				</ul>
 		</div>
-		{% if user.is_authenticated %}
-			<span style="float:right;" id="welcomeUser">Welcome, {{user.username}}</span>
-		{% endif %}
 	</nav>
 </header>
 <main role="main" class="container">
