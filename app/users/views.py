@@ -45,3 +45,8 @@ def profile(request):
         'p_form' : p_form
     }
     return render(request, 'users/profile.html', context)
+
+from django.shortcuts import render
+
+def error_403(request, exception):
+    return render(request, 'users/403.html', status=403)

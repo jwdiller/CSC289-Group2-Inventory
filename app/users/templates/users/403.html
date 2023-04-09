@@ -1,0 +1,20 @@
+<!-- 403.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>403 Forbidden</title>
+</head>
+<body>
+    {% if messages %}
+	<ul id="messageList">
+	{% for message in messages %}
+		<li><div class="alert {{ message.tags }}" role="alert">
+            {{message}}
+        </div></li>
+	{% endfor %}
+	</ul>
+{% endif %}
+    <h1>403 Forbidden</h1>
+    <p>Access denied. You do not have permission to view this page.</p>
+</body>
+</html>

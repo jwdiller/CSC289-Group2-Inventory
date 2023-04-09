@@ -27,19 +27,19 @@ def about(request):
     return render(request, 'about.html', {})
 
 # These will call the database.html file and send the responding database that will be shown for the user
-permission_required('core.view_customers')
+@permission_required('core.view_customers',raise_exception=True)
 def customer(request):
 	return render(request, 'database.html', {'title' : 'Customer', 'tableitems' : Customers.objects.all})
-permission_required('core.view_suppliers')
+@permission_required('core.view_suppliers',raise_exception=True)
 def supplier(request):
 	return render(request, 'database.html', {'title' : 'Supplier', 'tableitems' : Suppliers.objects.all})
-permission_required('core.view_stock')
+@permission_required('core.view_stock',raise_exception=True)
 def stock(request):
 	return render(request, 'database.html', {'title' : 'Stock', 'tableitems' : Stock.objects.all})
-permission_required('core.view_orders')
+@permission_required('core.view_orders',raise_exception=True)
 def order(request):
 	return render(request, 'database.html', {'title' : 'Order', 'tableitems' : Orders.objects.all})
-permission_required('core.view_incoming')
+@permission_required('core.view_incoming',raise_exception=True)
 def incoming(request):
 	return render(request, 'database.html', {'title' : 'Incoming', 'tableitems' : Incoming.objects.all})
 def dbhome(request):
@@ -50,7 +50,7 @@ def signuphome(request):
 	return render(request, 'core/create-entry.html', {})
 
 # This function confirms that the form for the 'Add Customer' page has been fully filled out and saves it's contents
-permission_required('core.add_customers')
+@permission_required('core.add_customers',raise_exception=True)
 def customersignup(request):
 	if request.method == 'POST':
 		form = CustomerForm(request.POST or None)
@@ -64,7 +64,7 @@ def customersignup(request):
 	return render(request, 'core/create-entry.html', {'form': form, 'formTitle' : 'Create Customer', 'formHeader' : 'Register a Customer Here'})
 
 # This function confirms that the form for the 'Add Supplier' page has been fully filled out, validates the data, and then saves its contents
-@permission_required('core.add_suppliers')
+@permission_required('core.add_suppliers',raise_exception=True)
 def suppliersignup(request):
 	if request.method == 'POST':
 		form = SupplierForm(request.POST)
@@ -82,7 +82,7 @@ def suppliersignup(request):
 	return render(request, 'core/create-entry.html', {'form': form, 'formTitle' : 'Create Supplier', 'formHeader' : 'Register a Supplier Here'})
 
 # This function confirms that the form for the 'Stock New Product' page has been fully filled out, validates the data, and then saves its contents
-@permission_required('core.add_stock')
+@permission_required('core.add_stock',raise_exception=True)
 def stocksignup(request):
 	if request.method == 'POST':
 		form = StockForm(request.POST)
@@ -108,7 +108,7 @@ def stocksignup(request):
 	return render(request, 'core/create-entry.html', {'form': form, 'formTitle' : 'Create Product Entry', 'formHeader' : 'Register a Product Here'})
 
 # This function confirms that the form for the 'New Outgoing Order' page has been fully filled out, validates the data, and then saves its contents
-@permission_required('core.add_orders')
+@permission_required('core.add_orders',raise_exception=True)
 def ordersignup(request):
     alert_messages(request)
     if request.method == 'POST':
@@ -143,7 +143,7 @@ def ordersignup(request):
     return render(request, 'core/create-entry.html', {'form': form, 'formTitle' : 'Create Outgoing Order', 'formHeader' : 'Register an Outgoing Order Here', 'priceList' : priceList(request)})
 
 # This function confirms that the form for the 'New Incoming Order' page has been fully filled out, validates the data, and then saves its contents
-@permission_required('core.add_orders')
+@permission_required('core.add_incoming',raise_exception=True)
 def incomingsignup(request):
     alert_messages(request)
     if request.method == 'POST':
