@@ -193,3 +193,15 @@ def priceList(request):
     for entry in raw_data:
         priceList[entry['id']] = [float(entry['price']), entry['amount']]
     return json.dumps(priceList)
+
+# I really need to install MySQL at some point. This should've been just one query.
+def taxList(request):
+    tax_data = salesTax.objects.values()
+    tax_dict = {}
+    for item in tax_data:
+        if item['date'].year in tax_dict:
+            tax_dict[item['date'].year] += item['tax']
+        else:
+            tax_dict[item['date'].year] = item['tax']
+    print(tax_dict)
+    return render(request, 'database.html', {'title' : 'Sales Tax', 'taxitems' : tax_dict})
