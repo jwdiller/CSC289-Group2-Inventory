@@ -30,12 +30,36 @@
                 <li class="nav-item"><a class="nav-link" href="{% url 'stockDB' %}">Products</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'orderDB' %}">Outgoing Orders</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'incomingDB' %}">Incoming Orders</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'taxDB' %}">Sales Tax</a></li>
             </ul>
     </div>
 </nav>
 {% if title %}
     {% if tableitems %}
         {% render_table tableitems %}
+    {% elif taxitems %}
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="orderable">
+                            <a href="?sort=Year">Year</a>  
+                        </th>
+                        <th class="orderable">
+                            <a href="?sort=salesTax">Sales Tax</a>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for year, tax in taxitems.items %}
+                        <tr class="{% cycle "even" "odd" %}">
+                            <td>{{year}}</td>
+                            <td>{{tax}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     {% else %}
         <span style="color: red;">There are no entries in the {{title}} Database.</span>
     {% endif %}
