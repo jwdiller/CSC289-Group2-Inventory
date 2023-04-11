@@ -1,0 +1,49 @@
+body {
+    font-family: monospace, monospace;
+    justify-content: center;
+    text-align: center;
+}
+
+.productDiv {
+    display : flex;
+    justify-content: space-around;
+    padding-bottom: 25px;
+    padding-top: 25;
+}
+
+.productEntry {
+    display : flex;
+    flex-flow : row;
+    justify-content: space-between;
+    width:50%;
+}
+
+.productName {
+	width: 60%;
+	white-space: pre-line;
+    text-align:right;
+}
+
+.unitPrice {
+	width: 20%;
+	white-space: pre-line;
+    text-align:right;
+}
+
+.math {
+    width: 50%;
+    text-align: right;
+}
+
+.notmath {
+    width: 50%;
+}
+
+.mathy {
+    display : flex;
+    flex-flow : row;
+}
+
+.footer {
+    text-align: center;
+}
