@@ -4,7 +4,8 @@ from django.shortcuts import render
 from django.contrib import messages
 from .query import *
 from decimal import Decimal
-import json
+#import json
+import simplejson as json
 
 def catalogHandler(request):
     list = getSuppliersAndProducts()
@@ -61,18 +62,19 @@ def catalogHandler(request):
                 newOrder.shortnote = ''
                 newOrder.note = ''
                 #print(newOrder)
-                receiptDict['products'].append({'name' : Stock.objects.values("productName").filter(id=int(product[7:]))[0]['productName'][:25],'amount' : amountDictionary[product], 'price' : ourPrice, 'discount' : discountDictionary["discount" + product[6:]], 'total' : miniTotal})
+                receiptDict['products'].append({'name' : Stock.objects.values("productName").filter(id=int(product[7:]))[0]['productName'][:25],'amount' : amountDictionary[product], str('price') : ourPrice, 'discount' : str(discountDictionary["discount" + product[6:]]), 'total' : str(miniTotal)})
                 newOrder.save()
         newTax = salesTax()
         newTax.date = rightNow
         newTax.tax = subTotal * Decimal(.0725) # Should change this in the future
-        receiptDict['subTotal'] = subTotal
-        receiptDict['tax'] = newTax.tax
-        receiptDict['total'] = subTotal + receiptDict['tax']
+        receiptDict['subTotal'] = "%.2f" % subTotal
+        receiptDict['tax'] = "%.2f" % newTax.tax
+        receiptDict['total'] = "%.2f" % (subTotal + newTax.tax)
         #print(newTax)
         newTax.save()
+        print(receiptDict)
         messages.success(request, "Cart Successful")
-        return render(request, 'cashierScreen.html', {'receiptDict' : receiptDict})
+        return render(request, 'cashierScreen.html', {'receiptDict' : json.dumps(receiptDict)})
     messages.error(request, "Error in Processing Cart, starting over.")
     return render(request, 'catalog.html', {'list':list,})
 
