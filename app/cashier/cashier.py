@@ -4,7 +4,9 @@ from django.shortcuts import render
 from django.contrib import messages
 from .query import *
 from decimal import Decimal
-import json
+#import json
+import simplejson as json
+from django.core.mail import send_mail
 
 def catalogHandler(request):
     list = getSuppliersAndProducts()
@@ -61,28 +63,57 @@ def catalogHandler(request):
                 newOrder.shortnote = ''
                 newOrder.note = ''
                 #print(newOrder)
-                receiptDict['products'].append({'name' : Stock.objects.values("productName").filter(id=int(product[7:]))[0]['productName'][:25],'amount' : amountDictionary[product], 'price' : ourPrice, 'discount' : discountDictionary["discount" + product[6:]], 'total' : miniTotal})
+                receiptDict['products'].append({'name' : Stock.objects.values("productName").filter(id=int(product[7:]))[0]['productName'][:25],'amount' : str(amountDictionary[product]), 'price' : str(ourPrice), 'discount' : str(discountDictionary["discount" + product[6:]]), 'total' : str(miniTotal)})
                 newOrder.save()
         newTax = salesTax()
         newTax.date = rightNow
         newTax.tax = subTotal * Decimal(.0725) # Should change this in the future
-        receiptDict['subTotal'] = subTotal
-        receiptDict['tax'] = newTax.tax
-        receiptDict['total'] = subTotal + receiptDict['tax']
+        receiptDict['subTotal'] = "%.2f" % subTotal
+        receiptDict['tax'] = "%.2f" % newTax.tax
+        receiptDict['total'] = "%.2f" % (subTotal + newTax.tax)
+        #receiptDict['email'] = Customers.objects.values('email').filter(id=customerID)[0]['email']
+        if customerID is not None:
+            receiptDict['email'] = Customers.objects.filter(id=customerID.id).first().email
         #print(newTax)
         newTax.save()
+        print(receiptDict)
         messages.success(request, "Cart Successful")
-        return render(request, 'cashierScreen.html', {'receiptDict' : receiptDict})
+        return render(request, 'cashierScreen.html', {'receiptDict' : json.dumps(receiptDict)})
     messages.error(request, "Error in Processing Cart, starting over.")
     return render(request, 'catalog.html', {'list':list,})
 
 def testReceipt(request):
     testDict = {'rightNow' : datetime.now().strftime("%A %B %d, %Y %X %Z"), 'products' : []}
     
-    testDict['products'].append({'name' : 'Questionable Life Choices', 'amount' : 5, 'price' : 1.55, 'discount' : 2, 'total' : 5.75})
-    testDict['products'].append({'name' : 'Chuuni Daydreams', 'amount' : 10, 'price' : 0.50, 'discount' : 0, 'total' : 5.00})
-    testDict['subTotal'] = 10.75
-    testDict['tax'] = .78
-    testDict['total'] = 11.53
+    testDict['products'].append({'name' : 'Questionable Life Choices', 'amount' : "5", 'price' : "1.55", 'discount' : "2", 'total' : "5.75"})
+    testDict['products'].append({'name' : 'Chuuni Daydreams', 'amount' : "10", 'price' : "0.50", 'discount' : "0", 'total' : "5.00"})
+    testDict['subTotal'] = "10.75"
+    testDict['tax'] = ".78"
+    testDict['total'] = "11.53"
+    testDict['email'] = 'cyborg.stan@gmail.com'
     
-    return render(request, 'cashierScreen.html', {'receiptDict' : json.dumps(testDict)}) 
+    return render(request, 'cashierScreen.html', {'receiptDict' : json.dumps(testDict)})
+
+def emailReceipt(request):
+    receiptDict = json.loads(request.POST['receiptDict'])
+    
+    outputString = receiptDict['rightNow']
+    outputString += "\n\n"
+    
+    for product in receiptDict['products']:
+        outputString += "\n" + product['name'] + "\t" + product['price'] + " x "  + product['amount']
+        outputString += "\n\t\t -" + product['discount'] + " = " + product['total'] + "\n"
+        
+    outputString += "\n\nSubTotal : " + receiptDict['subTotal']
+    outputString += "\nTax : " + receiptDict['tax']
+    outputString += "\nTotal : " + receiptDict['total']
+    
+    outputString += "\n\nThank you for shopping with us!"
+    
+    try:
+        send_mail(subject="Receipt from Small Store", message=outputString, from_email=None, recipient_list=[receiptDict['email']], fail_silently=False,)
+        messages.success(request, "Receipt Emailed to " + receiptDict['email'])
+    except:
+        messages.error(request, "Could not send email.")
+    
+    return render(request, 'cashierScreen.html', {})
