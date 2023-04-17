@@ -17,6 +17,7 @@ urlpatterns = [
   path('database/order', views.order, name='orderDB'),
   path('database/incoming', views.incoming, name='incomingDB'),
   path('database/', views.dbhome, name='DB-home'), # Also this line to the general navbar base.html
+  path('database/tax', query.taxList, name="taxDB"), # Underlying code is a mess
   
   # Start of create URLS
   path('create/customer', views.customersignup, name='customersignup'), # Sign up
@@ -40,4 +41,5 @@ urlpatterns = [
   #password reset
   path('password/', auth_views.PasswordChangeView.as_view(), name='password_reset2'),
 #path('top_5_stocks/', views.top_5_stocks, name='top_5_stocks'), # Top 5 Stocks (Query)
+
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
