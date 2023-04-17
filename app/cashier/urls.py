@@ -9,6 +9,7 @@ urlpatterns = [
   path('', views.cashier, name='cashier'), # Cashier Page
   path('catalog', views.catalog, name='catalog'), # Catalog View
   path('catalogHandler', cashier.catalogHandler, name='catalogHandler'), # Form action
+  path('emailReceipt', cashier.emailReceipt, name='emailReceipt'),
   
   path('testReceipt', cashier.testReceipt, name='testReceipt'), # For testing purposes
 ]

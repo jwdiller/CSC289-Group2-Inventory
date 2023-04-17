@@ -53,9 +53,16 @@ Home
 
         }
     </script>
-    <button type="button" onclick="showReceipt()">Create a Receipt</button>
+    <button class="nav-item btn btn-info" type="button" onclick="showReceipt()">Create a Receipt</button>
+    {% if 'email' in receiptDict %}
+        <form action={% url 'emailReceipt' %} method='POST'>
+            {% csrf_token %}
+            <input type="hidden" name="receiptDict" value="{{ receiptDict }}">
+            <button class="nav-item btn btn-info" type="Submit">Email the Receipt</button>
+        </form>
+    {% endif %}
 {% endif %}
 
-    <a href={% url 'catalog' %}>Create New Cart</a>
+    <div class="nav-item"><a class="btn btn-info" href="{% url 'catalog' %}">Create New Cart</a></div>
 </body>
 {% endblock %}

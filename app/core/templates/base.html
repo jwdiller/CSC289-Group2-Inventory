@@ -5,14 +5,21 @@
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" href="{% static 'css/message.css' %}">
-	<link rel="stylesheet" href="{% static 'css/simple.css' %}" id="css">
+	{% if user.is_authenticated %}
+		{% if user.profile.cssTheme %}
+			<link rel="stylesheet" type="text/css" href="{% static 'css/themes/'|add:user.profile.cssTheme|add:'.css' %}">
+		{% else %}
+			<link rel="stylesheet" type="text/css" href="{% static 'css/themes/simple.css' %}">
+		{% endif %}
+	{% else %}
+		<link rel="stylesheet" type="text/css" href="{% static 'css/themes/simple.css' %}">
+	{% endif %}
 </head>
 <body>
 	<h1 id="title">Small Inventory Manager</h1>
     <div id="app"></div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="{% static 'app/js/main.js' %}"></script>
-	<script src="{% static 'scripts/cssSelect.js' %}"></script>
 	<header class="site-header">
 
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -72,13 +79,6 @@
 		<div class="endbar">
 <!-- >>>>>>> 31dd6ef8bdb094d1ed48093eceee6696456902da -->
 		©2023 The InterGalactic Pirate Support Group, powered by <a href="https://www.djangoproject.com" target="_blank">Django</a>, <a href="https://getbootstrap.com" target="_blank">BootStrap<a>, <a href="https://django-crispy-forms.readthedocs.io/en/latest/" target="_blank">Crispy Forms</a>
-		<span style="float:right;">
-			<select id="cssSelect" onchange="newCss()">
-				<option value="{% static 'css/simple.css' %}">Simple</option>
-				<option value="{% static 'css/icecream.css' %}">Ice Cream</option>
-				<option value="{% static 'css/watches.css' %}">Watches</option>
-			</select>
-		</span>
 	</div>
 </div>
 	

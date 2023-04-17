@@ -1,0 +1,102 @@
+@font-face{
+    font-family: 'myFirstFont';
+    src: url("/static/images/MouseMemoirs-Regular.ttf");
+}
+
+.selectdatewidget{
+  font-size: 20px;
+}
+
+#id_username, #id_password, #id_password1, #id_email, #id_shortnote, #id_note, #id_cents, #id_amount, 
+#id_name, #id_phoneNumber, #id_productName, #id_upc, #id_description{
+  font-size: 22px;
+}
+
+.orderable{
+  font-family: 'myFirstFont';
+  font-size: 1.2em;
+  padding-left: 18px;
+  background-color:rgb(238, 204, 160);
+  
+}
+
+#register_button{
+  font-family: 'myFirstFont';
+  font-size: 25px;
+}
+
+.mb-3{
+  font-family: 'myFirstFont';
+  font-size: 25px;
+}
+
+.odd{
+  font-family: 'myFirstFont';
+  font-size: 20px;
+  padding-left: 18px;
+  
+}
+
+.even, td{
+  font-family: 'myFirstFont';
+  font-size: 20px;
+  padding-left: 18px;
+  
+}
+
+.orderable a{
+  color:#3333FF !important;
+}
+
+.nav-link{
+  font-family: 'myFirstFont';
+  font-size: 30px;
+}
+
+.navbar-brand{
+  font-family: 'myFirstFont';
+  font-size: 30px;
+}
+
+#homePage{
+  margin-top: 10px;
+  font-family: 'myFirstFont';
+  font-size: 30px;
+}
+
+h3{
+  margin-top: 10px;
+  font-family: 'myFirstFont';
+  font-size: 40px;
+}
+
+label{
+  margin-top: 20px;
+}
+
+h1{
+  margin-top: 20px;
+}
+
+.endbar{
+  margin: 20px;
+}
+
+.table1{
+  background-color: white;
+  border: solid black; 
+  font-family: 'myFirstFont';
+  font-size: 20px;
+}
+
+body{
+  background-image: url("/static/images/icecream-image.jpg");
+}
+
+h1 {
+  font-size: 50px;
+  text-align: center;
+  font-weight: bold;
+  color: #000;
+  font-family: 'myFirstFont';
+}
