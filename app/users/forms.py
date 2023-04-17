@@ -3,6 +3,15 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import PasswordChangeForm
 from .models import Profile
+
+class cssThemeForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['cssTheme']
+        widgets = {
+            'cssTheme': forms.RadioSelect
+        }
+
 # Initializes email field and creates form field values
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField()
@@ -26,4 +35,7 @@ class PasswordUserChangeForm(PasswordChangeForm):
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['image']
+        fields = ['image', 'cssTheme']
+        widgets = {
+            'cssTheme': forms.RadioSelect
+        }

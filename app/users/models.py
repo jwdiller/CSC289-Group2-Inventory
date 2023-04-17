@@ -8,6 +8,12 @@ from PIL import Image
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(default='default.jpg', upload_to='profile_pics')
+    themeChoices = [
+        ('simple', 'Simple'),
+        ('icecream', 'Ice Cream'),
+        ('watches', 'Watches'),
+    ]
+    cssTheme = models.CharField(max_length=20, choices=themeChoices, default='simple')
 
     def __str__(self):
         return f'{self.user.username} Profile'

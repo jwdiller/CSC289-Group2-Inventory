@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, PasswordUserChangeForm
+from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, PasswordUserChangeForm, cssThemeForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import login, authenticate,logout
@@ -45,3 +45,18 @@ def profile(request):
         'p_form' : p_form
     }
     return render(request, 'users/profile.html', context)
+
+from django.shortcuts import render
+
+def error_403(request, exception):
+    return render(request, 'users/403.html', status=403)
+
+def update_theme(request):
+    if request.method == 'POST':
+        form = cssThemeForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = cssThemeForm(instance=request.user)
+    return render(request, 'update_theme.html', {'form': form})
