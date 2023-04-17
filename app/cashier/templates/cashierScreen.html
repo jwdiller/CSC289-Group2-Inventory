@@ -21,42 +21,48 @@ Home
     </ul>
     {% endif %}
 
-{% if receiptDict %}
+    {% if receiptDict %}
     <div style="display: none;" id="receiptDict">{{receiptDict}}</div>
-    <div id="debug"></div>
     <script>
         var receiptDict = document.getElementById("receiptDict").innerHTML;
         var rData = JSON.parse(receiptDict);
-        document.getElementById("debug").innerHTML = rData;
+        console.log(rData);
 
         function showReceipt() {
 
 	    var output = "<!DOCTYPE HTML><!-- Receipt Template. Later improvements may allow for better customization. --><html><head><title>Receipt</title><link rel=\"stylesheet\" href=\"{% static 'css/receipt.css' %}\"></head><body><div class=\"numbers\" id=\"numbers\">";
 	    output += rData['rightNow'];
-	    output +="</div><div class=\"header\" id=\"header\">Welcome to Our Shop</div><div class=\"items\" id=\"items\">";
+	    output +="</div><div class=\"header\" id=\"header\">Welcome to Our Shop</div><br/>---------<br/><div class=\"items\" id=\"items\">";
 
         productLength = rData['products'].length;
 	    for (var looper=0; looper<productLength; looper++) {
-    		output += "<br/><span class=\"productName\">" + rData['products'][looper]['name'] + "</span><span><span class=\"unitPrice\">" + rData['products'][looper]['price'] + "</span> x <span class=\"productAmount\">"
-		    + rData['products'][looper]['amount'] + "<span><br/><span class=\"discountSpan\">- " + rData['products'][looper]['discount'] + " = <span class=\"productTotal\">" + rData['products'][looper]['total'] + "</span><br/>";
+    		output += "<div class=\"productDiv\"><span class=\"productName\">" + rData['products'][looper]['name'] + "</span><span><span class=\"unitPrice\">" + rData['products'][looper]['price'] + "</span> x <span class=\"productAmount\">"
+		    + rData['products'][looper]['amount'] + "</span><br/><span class=\"discountSpan\">- " + rData['products'][looper]['discount'] + " = <span class=\"productTotal\">" + String("⠀⠀⠀⠀" + rData['products'][looper]['total']).slice(-7) + "</span></div>";
 	    }
 
-	    output += "</div><br/>---------<br/><br/><div class=\"math\" id=\"math\">subTotal : <span class=\"subTotal\">";
-	    output += rData['subTotal'];
-	    output += "</span><br/>Tax : <span class=\"taxes\">";
-	    output += rData['tax'];
-	    output += "</span><br/>Total : <span class=\"total\">";
-        output += rData['total'];
-        output += "</span><br/></div><br/>---------<br/><div class=\"footer\" id=\"footer\"><br/>Thank you for shopping with us!</div></body></html>";
+	    output += "</div><br/>---------<br/><br/><div class=\"mathy\"><div class=\"notmath\"></div><div class=\"math\" id=\"math\">subTotal : ";
+	    output += String("⠀⠀⠀⠀⠀⠀" + rData['subTotal']).slice(-7);
+	    output += "</span><br/>Tax : ";
+	    output += String("⠀⠀⠀⠀⠀⠀" + rData['tax']).slice(-7);
+	    output += "</span><br/>Total : ";
+        output += String("⠀⠀⠀⠀⠀⠀" + rData['total']).slice(-7);
+        output += "</span><br/></div></div><br/>---------<br/><div class=\"footer\" id=\"footer\"><br/>Thank you for shopping with us!</div></body></html>";
 	
-	    myWindow = window.open('about:blank',"Receipt",'width=800,height=1025,left=200,top=200');
+	    myWindow = window.open('about:blank',"Receipt",'width=400,height=1025,left=200,top=200');
 	    myWindow.document.write(output);
 
         }
     </script>
-    <button type="button" onclick="showReceipt()">Create a Receipt</button>
+    <button class="nav-item btn btn-info" type="button" onclick="showReceipt()">Create a Receipt</button>
+    {% if 'email' in receiptDict %}
+        <form action={% url 'emailReceipt' %} method='POST'>
+            {% csrf_token %}
+            <input type="hidden" name="receiptDict" value="{{ receiptDict }}">
+            <button class="nav-item btn btn-info" type="Submit">Email the Receipt</button>
+        </form>
+    {% endif %}
 {% endif %}
 
-    <a href={% url 'catalog' %}>Create New Cart</a>
+    <div class="nav-item"><a class="btn btn-info" href="{% url 'catalog' %}">Create New Cart</a></div>
 </body>
 {% endblock %}
