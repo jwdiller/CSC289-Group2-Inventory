@@ -7,6 +7,7 @@ Home
 
 {% block head %}
     <link rel="stylesheet" href="{% static 'css/cashier.css' %}" id="css">
+    <script src="{% static 'scripts/validEmail.js' %}" defer></script>
 {% endblock %}
 
 {% block content %}
@@ -55,13 +56,17 @@ Home
         }
     </script>
     <button class="nav-item btn btn-info" type="button" onclick="showReceipt()">Create a Receipt</button>
-    {% if 'email' in receiptDict %}
-        <form action={% url 'emailReceipt' %} method='POST'>
-            {% csrf_token %}
-            <input type="hidden" name="receiptDict" value="{{ receiptDict }}">
-            <button class="nav-item btn btn-info" type="Submit">Email the Receipt</button>
-        </form>
-    {% endif %}
+    <form action={% url 'emailReceipt' %} method='POST'>
+        {% csrf_token %}
+        <label for="emailAddress">E-mail</label>
+        {% if email %}
+            <input type="text" id="emailAddress" name="emailAddress" placeholder="email@address.com" value="{{ email }}" oninput="showvalid()">
+        {% else %}
+            <input type="text" id="emailAddress" name="emailAddress" placeholder="email@address.com" oninput="showvalid()">
+        {% endif %}
+        <input type="hidden" name="receiptDict" value="{{ receiptDict }}">
+        <button name="emailButton" id="emailButton" class="nav-item btn btn-info" type="Submit">Email the Receipt</button>
+    </form>
 {% endif %}
     <div class="nav-item"><a class="btn btn-info" href="{% url 'catalog' %}">Create New Cart</a></div>
     </div>
