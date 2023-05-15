@@ -78,7 +78,7 @@ def catalogHandler(request):
         newTax.save()
         print(receiptDict)
         messages.success(request, "Cart Successful")
-        return render(request, 'cashierScreen.html', {'receiptDict' : json.dumps(receiptDict)})
+        return render(request, 'cashierScreen.html', {'receiptDict' : json.dumps(receiptDict), 'email' : receiptDict['email']})
     messages.error(request, "Error in Processing Cart, starting over.")
     return render(request, 'catalog.html', {'list':list,})
 
