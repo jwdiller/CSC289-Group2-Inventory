@@ -90,12 +90,13 @@ def testReceipt(request):
     testDict['subTotal'] = "10.75"
     testDict['tax'] = ".78"
     testDict['total'] = "11.53"
-    testDict['email'] = 'cyborg.stan@gmail.com'
+    testDict['email'] = 'jwdiller@my.waketech.edu'
     
-    return render(request, 'cashierScreen.html', {'receiptDict' : json.dumps(testDict)})
+    return render(request, 'cashierScreen.html', {'receiptDict' : json.dumps(testDict), 'email' : 'jwdiller@my.waketech.edu'})
 
 def emailReceipt(request):
     receiptDict = json.loads(request.POST['receiptDict'])
+    print(request.POST['emailAddress'])
     
     outputString = receiptDict['rightNow']
     outputString += "\n\n"
@@ -111,8 +112,8 @@ def emailReceipt(request):
     outputString += "\n\nThank you for shopping with us!"
     
     try:
-        send_mail(subject="Receipt from Small Store", message=outputString, from_email=None, recipient_list=[receiptDict['email']], fail_silently=False,)
-        messages.success(request, "Receipt Emailed to " + receiptDict['email'])
+        send_mail(subject="Receipt from Small Store", message=outputString, from_email=None, recipient_list=[request.POST['emailAddress']], fail_silently=False,)
+        messages.success(request, "Receipt Emailed to " + request.POST['emailAddress'])
     except:
         messages.error(request, "Could not send email.")
     
